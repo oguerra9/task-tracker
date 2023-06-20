@@ -37,14 +37,17 @@ class DataService {
     }
 
     async addUser(userName) {
-        let userRef = collection(db, 'users');
+        let userRef = doc(db, 'users', userName);
         
-        const docRef = await addDoc(userRef, {
-            name: userName,
+        // const docRef = await addDoc(userRef, {
+        //     name: userName,
+        // });
+        const docRef = await setDoc(userRef, {
+            name: userName
         });
 
-        console.log(`user with name ${userName} and id ${docRef.id} added to collection "users"`);
-        return docRef.id;
+        console.log(`user with name ${userName} and added to collection "users"`);
+        return docRef;
     }
 
     async deleteTask(taskId) {
