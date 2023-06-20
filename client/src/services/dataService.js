@@ -1,4 +1,4 @@
-import { collection, getDocs, getDoc, doc, setDoc, addDoc, updateDoc } from "firebase/firestore";
+import { collection, getDocs, getDoc, doc, setDoc, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from '../firebase';
 
 class DataService {
@@ -9,6 +9,13 @@ class DataService {
             })
     }
 
+    // async getAllTasks() {
+    //     let currUser = localStorage.getItem('username');
+    //     let tasksRef = collection(db, 'users', currUser, 'tasks');
+
+    //     const docRef = await getDocs(tasksRef)
+    // }
+
     async addTask(taskData) {
         /*
             task_title: '',
@@ -16,17 +23,49 @@ class DataService {
             task_due_date: '',
             task_status: '',
         */
-       let currUser = localStorage.getItem('username');
-       let userRef = collection(db, "users", currUser, "tasks");
+        let currUser = localStorage.getItem('username');
+        let userRef = collection(db, "users", currUser, "tasks");
 
-       const docRef = await addDoc(userRef, {
-        description: taskData.task_description,
-        due_date: taskData.task_due_date,
-        status: taskData.task_status,
-        title: taskData.task_title,
-    });
-    console.log(`Task added with ID: ${docRef.id}`);
-    return docRef.id;
+        const docRef = await addDoc(userRef, {
+            description: taskData.task_description,
+            due_date: taskData.task_due_date,
+            status: taskData.task_status,
+            title: taskData.task_title,
+        });
+        console.log(`Task added with ID: ${docRef.id}`);
+        return docRef.id;
+    }
+
+    async addUser(userName) {
+        let userRef = collection(db, 'users');
+        
+        const docRef = await addDoc(userRef, {
+            name: userName,
+        });
+
+        console.log(`user with name ${userName} and id ${docRef.id} added to collection "users"`);
+        return docRef.id;
+    }
+
+    async deleteTask(taskId) {
+        let currUser = localStorage.getItem('username');
+        let taskRef = doc(db, 'users', currUser, 'tasks', taskId);
+
+        await deleteDoc(taskRef);
+
+        console.log(`deleted task with id ${taskId}`);
+        return taskId;
+    }
+
+    async updateTask(taskId, taskData) {
+        let currUser = localStorage.getItem('username');
+        let taskRef = doc(db, 'users', currUser, 'tasks', taskId);
+
+        const docRef = setDoc(taskRef, taskData);
+
+        console.log(`${currUser}'s task with id ${taskId} updated with ${JSON.stringify(taskData)}`);
+        return docRef.id;
+
     }
 
 }
