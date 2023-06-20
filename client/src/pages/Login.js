@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import DataService from '../services/dataService';
 
 import { collection, getDocs, getDoc, doc } from "firebase/firestore";
@@ -11,6 +13,12 @@ export default function Login() {
     const [username, setUsername] = useState('');
 
     const [submitted, setSubmitted] = useState(false);
+
+    useEffect(() => {
+        if (localStorage.hasOwnProperty('username')) {
+            window.location.href = 'taskDisplay';
+        }
+    }, []);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -27,110 +35,23 @@ export default function Login() {
         window.location.href = '/taskDisplay';
     };
 
-    // const renderUserInfo = (username) => {
-    //     return <UserInfo propsUser={username}/>;
-    // };
-
     return (
-        <Container>
+        <Container style={{'backgroundColor':'white', 'border':'1px solid blue'}}>
             <Form>
-                <Form.Group className="mb-3" controlId="username">
-                    <Form.Label>Username</Form.Label>
-                    <Form.Control type="text" name="username" value={username} onChange={handleChange} />
-                </Form.Group>
-                <Button variant="primary" type="submit" onClick={submitForm}>
-                    Login
-                </Button>
+                <Row>
+                    <Col>
+                        <Form.Group className="mb-3" controlId="username">
+                            <Form.Control placeholder="username" type="text" name="username" value={username} onChange={handleChange} style={{'border':'1px solid blue'}} />
+                        </Form.Group>
+                    </Col>
+                    <Col>
+                        <Button variant="primary" type="submit" onClick={submitForm}>
+                            Login
+                        </Button>
+                    </Col>
+                </Row>
             </Form>
-            <Container>
-                {submitted ? (
-                    <UserInfo propsUser={username}/>
-                ) : (
-                    <p>not yet submitted</p>
-                )}
-            </Container>
         </Container>
     )
 }
 
-function UserInfo(props) {
-    const [userData, setUserData] = useState({});
-    const [loading, setLoading] = useState(true);
-    const [userExists, setUserExists] = useState(null);
-
-    useEffect(() => {
-        async function getUserData(username) {
-            // await getDocs(collection(db, "users"))
-            //     .then((querySnapshot)=>{               
-            //         const newData = querySnapshot.docs
-            //             .map((doc) => ({...doc.data(), id:doc.id }));
-            //         //console.log(newData);
-            //         setUserData(newData);
-            //         setLoading(false);
-            //     })
-            let docRef = doc(db, 'users', username);
-            //let docSnap = await getDoc(docRef);
-
-            await getDoc(docRef)
-                .then((querySnapshot) => {
-                    if (querySnapshot.exists()) {
-                        setUserExists(true);
-                        console.log(`user data: ${JSON.stringify(querySnapshot.data())}`);
-                        setUserData(querySnapshot.data());
-                        setLoading(false);
-                    } else {
-                        setUserExists(false);
-                        console.log(`user with name ${username} could not be found`);
-                    }
-                })
-
-            // if (docSnap.exists()) {
-            //     console.log("Document data:", docSnap.data());
-            //     //setUserData(docSnap.data());
-            //     //setLoading(false);
-            // } else {
-            //     console.log(`Document for user ${username} could not be found`);
-            // }
-
-        }
-        getUserData(props.propsUser);
-    }, []);
-
-    return (
-        <Container>
-            {loading ? (
-                <p>Loading...</p>
-            ) : (
-                <Container>
-                    <p>User Data: {JSON.stringify(userData)}</p>
-                </Container>
-            )}
-        </Container>
-    );
-}
-
-// function UserInfo(props) {
-//     const [userData, setUserData] = useState({});
-//     const [loading, setLoading] = useState(true);
-
-//     useEffect(() => {
-//         getUserData(props.propsUser);
-//     });
-
-//     const getUserData = (username) => {
-//         (DataService.getUser(username)).then((response) => {
-//             setUserData(response);
-//             setLoading(false);
-//         });
-//     };
-    
-//     return (
-//         <Container>
-//             {loading ? (
-//                 <p>Loading...</p>
-//             ) : (
-//                 <p>User Data: {JSON.stringify(userData)}</p>
-//             )}
-//         </Container>
-//     );
-// }

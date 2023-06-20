@@ -15,7 +15,6 @@ export default function NewTaskForm() {
             task_description: '',
             task_due_date: '',
             task_status: '',
-            task_user: localStorage.getItem('username')
         }
     ); 
 
@@ -27,10 +26,9 @@ export default function NewTaskForm() {
     };
 
     const submitForm = (event) => {
-        event.preventDefault();
+        //event.preventDefault();
 
-        console.log(`form submitted`);
-        console.log(`form data:`);
+        newTaskFormData.task_due_date = new Date(newTaskFormData.task_due_date).getTime();
         console.log(JSON.stringify(newTaskFormData));
 
         (DataService.addTask(newTaskFormData)).then((response) => {
