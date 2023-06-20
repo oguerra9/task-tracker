@@ -5,20 +5,47 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import DataService from '../services/dataService';
+import Alert from 'react-bootstrap/alert';
 
 import { collection, getDocs, getDoc, doc } from "firebase/firestore";
 import { db } from '../firebase';
 
 export default function Login() {
     const [username, setUsername] = useState('');
+    const [logName, setLogName] = useState('');
+
+    const [show, setShow] = useState(false);
+
+    const handleShow = () => setShow(true);
+
 
     const [submitted, setSubmitted] = useState(false);
 
     useEffect(() => {
-        if (localStorage.hasOwnProperty('username')) {
-            window.location.href = 'taskDisplay';
+        // if (localStorage.hasOwnProperty('username')) {
+        //     window.location.href = 'taskDisplay';
+        // }
+        
+        async function getUserData(username) {
+            let userRef = doc(db, 'users', username);
+
+            const docRef = await getDoc(userRef)
+                .then((querySnapshot) => {
+                    if (querySnapshot.exists()) {
+                        console.log(`user ${username} found`);
+                        localStorage.setItem("username", username);
+                        window.location.href = 'taskDisplay';
+                    } else {
+                        console.log(`user ${username} not found`);
+                        handleShow();
+                        setSubmitted(false);
+                    }
+                })
         }
-    }, []);
+        if (submitted) {
+            getUserData(username);
+        }
+    }, [submitted]);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -29,14 +56,16 @@ export default function Login() {
         event.preventDefault();
 
         console.log(`username: ${username}`);
-        localStorage.setItem("username", username);
 
         setSubmitted(true);
-        window.location.href = '/taskDisplay';
     };
 
     return (
         <Container style={{'backgroundColor':'white', 'border':'1px solid blue'}}>
+            {/* <Button>Login</Button>
+            <Button>Sign Up</Button> */}
+
+            
             <Form>
                 <Row>
                     <Col>
@@ -49,6 +78,14 @@ export default function Login() {
                             Login
                         </Button>
                     </Col>
+                </Row>
+                {show ? (
+                    <Alert>User not found</Alert>
+                ) : (
+                    <></>
+                )}
+                <Row>
+
                 </Row>
             </Form>
         </Container>

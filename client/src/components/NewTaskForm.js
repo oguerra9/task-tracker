@@ -26,7 +26,7 @@ export default function NewTaskForm() {
     };
 
     const submitForm = (event) => {
-        //event.preventDefault();
+        event.preventDefault();
 
         newTaskFormData.task_due_date = new Date(newTaskFormData.task_due_date).getTime();
         console.log(JSON.stringify(newTaskFormData));
