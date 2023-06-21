@@ -8,23 +8,23 @@ import { collection, getDocs, getDoc, doc } from "firebase/firestore";
 import { db } from '../firebase';
 import DataService from '../services/dataService';
 
-export default function NewTaskForm() {
-    const [newTaskFormData, setTaskFormData] = useState(
-        { 
-            task_title: '',
-            task_description: '',
-            task_due_date: '',
-            task_status: '',
-        }
-    ); 
+export default function NewTaskForm(props) {
+    // const [newTaskFormData, setTaskFormData] = useState(
+    //     { 
+    //         task_title: '',
+    //         task_description: '',
+    //         task_due_date: '',
+    //         task_status: '',
+    //     }
+    // ); 
     
 
     const statusOptions = ['completed', 'in_progress'];
        
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-        setTaskFormData({ ...newTaskFormData, [name]: value });
-    };
+    // const handleChange = (event) => {
+    //     const { name, value } = event.target;
+    //     setTaskFormData({ ...newTaskFormData, [name]: value });
+    // };
 
     // const submitForm = (event) => {
     //     event.preventDefault();
@@ -43,11 +43,11 @@ export default function NewTaskForm() {
             <Container>
                 <Form.Group className="mb-3" controlId="task_title">
                     <Form.Label>Title</Form.Label>
-                    <Form.Control type="text" name="task_title" onChange={handleChange} value={newTaskFormData.task_title} />
+                    <Form.Control type="text" name="task_title" onChange={props.handleChange} value={props.newTaskFormData.task_title} />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="task_description">
                     <Form.Label>Description</Form.Label>
-                    <Form.Control type="text" name="task_description" value={newTaskFormData.task_description} onChange={handleChange} />
+                    <Form.Control type="text" name="task_description" value={props.newTaskFormData.task_description} onChange={props.handleChange} />
                 </Form.Group>
             </Container>
             <Container>
@@ -57,8 +57,8 @@ export default function NewTaskForm() {
                         type="date"
                         name="task_due_date"
                         placeholder="Due date"
-                        value={newTaskFormData.task_due_date}
-                        onChange={handleChange}
+                        value={props.newTaskFormData.task_due_date}
+                        onChange={props.handleChange}
                     />
                 </Form.Group>
             </Container>
@@ -67,11 +67,8 @@ export default function NewTaskForm() {
                     className="mb-3"  
                     name="task_status" 
                     controlId="task_status"
-                    value={newTaskFormData.task_status} 
-                    onChange={e => {
-                        console.log("selected task status", e.target.value);
-                        setTaskFormData({ ...newTaskFormData, task_status: e.target.value });
-                    }}
+                    value={props.newTaskFormData.task_status} 
+                    onChange={(e) => {props.setTaskFormData({ ...props.newTaskFormData, task_status: e.target.value })}}
                 >
                     <Form.Label>Status</Form.Label>
                     <Form.Select>
@@ -82,7 +79,7 @@ export default function NewTaskForm() {
                     </Form.Select>
                 </Form.Group>
             </Container>
-            <Button variant="primary" type="submit" onClick={submitForm}>
+            <Button variant="primary" type="submit" onClick={props.submitForm}>
                 Add Task
             </Button>
         </Form>

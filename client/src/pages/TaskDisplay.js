@@ -26,6 +26,48 @@ export default function TaskDisplay() {
     const [refresh, setRefresh] = useState(false);
 
     const [userTasks, setUserTasks] = useState([]);
+    const [displayUserTasks, setDisplayUserTasks] = useState([]);
+
+    const [newTaskFormData, setTaskFormData] = useState(
+        { 
+            task_title: '',
+            task_description: '',
+            task_due_date: '',
+            task_status: '',
+        }
+    ); 
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setTaskFormData({ ...newTaskFormData, [name]: value });
+    };
+
+    const submitForm = (event) => {
+        event.preventDefault();
+
+        newTaskFormData.task_due_date = new Date(newTaskFormData.task_due_date).getTime();
+        console.log(JSON.stringify(newTaskFormData));
+
+        (DataService.addTask(newTaskFormData)).then((response) => {
+            console.log(`task created`);
+        });
+
+        handleClose();
+
+        setTaskFormData(
+            { 
+                task_title: '',
+                task_description: '',
+                task_due_date: '',
+                task_status: '',
+            }
+        );
+
+        setRefresh(true);
+
+    };
+
+    const [displayTasks, setDisplayTasks] = useState([]);
 
     useEffect(() => {
         async function getUserData(username) {
@@ -37,28 +79,16 @@ export default function TaskDisplay() {
             let tasksRef = collection(db, 'users', username, 'tasks');
             let taskArr = [];
 
-            // await getDoc(docRef)
-            //     .then((querySnapshot) => {
-            //         if (querySnapshot.exists()) {
-            //             setUserExists(true);
-            //             console.log(`user data: ${JSON.stringify(querySnapshot.data())}`);
-            //             setUserData(querySnapshot.data());
-            //             setLoading(false);
-            //         } else {
-            //             setUserExists(false);
-
-            //             console.log(`user with name ${username} could not be found`);
-            //         }
-            //     })
-            // }
-
             await getDocs(tasksRef) 
                 .then((querySnapshot) => {
+                    let index = 1;
                     querySnapshot.forEach((doc) => {
                         console.log(doc.id, " => ", doc.data());
-                        taskArr.push({id: doc.id, ...doc.data()});
+                        taskArr.push({index: index, id: doc.id, ...doc.data()});
+                        index += 1;
                     });
                     setUserTasks(taskArr);
+                    console.log(`taskArr: ${JSON.stringify(taskArr)}`);
                     setLoading(false);
                 })
             
@@ -67,23 +97,22 @@ export default function TaskDisplay() {
             setRefresh(false);
             getUserData(currUser);
             console.log(userTasks);
-    }, [refresh]);
+    }, [refresh]); 
 
-    // const deleteTask = (taskId) => {
-    //     console.log(taskId);
-    //     (DataService.deleteTask(taskId)).then((response) => {
-    //         console.log(`task deleted`);
-    //         console.log(response);
-    //     });
-    // };
 
     const deleteTask = (event) => {
-        let taskId = event.target.id;
-        console.log(taskId);
-        setRefresh(true);
+        let taskId = event.target.name;
+        console.log(`delete id ${taskId}`);
+        console.log(`delete target ${event.target.name}`);
+        let taskLine = document.getElementById(taskId);
+        taskLine.remove();
+        let taskArr = userTasks;
         (DataService.deleteTask(taskId)).then((response) => {
             console.log(`task deleted`);
             console.log(response);
+            taskArr.splice(event.target.name);
+            setUserTasks(taskArr);
+            console.log(`userTasks: ${JSON.stringify(userTasks)}`);
         });
     };
 
@@ -116,13 +145,13 @@ export default function TaskDisplay() {
                             <Col className="col-lg-1"></Col>
                         </Row>
                         {userTasks.map(task => (
-                            <Row key={task.id}>
+                            <Row key={task.id} id={task.id}>
                                 <Col className="col-lg-3" style={{'border':'1px solid black'}}>{task.title}</Col>
                                 <Col className="col-lg-3" style={{'border':'1px solid black'}}>{task.description}</Col>
                                 <Col className="col-lg-2" style={{'border':'1px solid black'}}>{task.due_date}</Col>
                                 <Col className="col-lg-3" style={{'border':'1px solid black'}}>{task.status}</Col>
                                 <Col className="col-lg-1" style={{'border':'1px solid black'}}>
-                                    <Button id={task.id} onClick={deleteTask}>X</Button>
+                                    <Button name={task.id} onClick={deleteTask}>X</Button>
                                 </Col>
                             </Row>
                         ))}
@@ -135,7 +164,12 @@ export default function TaskDisplay() {
                     <Modal.Title>New Event</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <NewTaskForm />
+                    <NewTaskForm 
+                        newTaskFormData={newTaskFormData}
+                        handleChange={handleChange}
+                        submitForm={submitForm}
+                        setTaskFormData={setTaskFormData}
+                    />
                 </Modal.Body>
             </Modal>
         </>
@@ -143,10 +177,3 @@ export default function TaskDisplay() {
 
 }
 
-// async function retrieveTasks(taskIds) {
-//     let taskArr = [];
-
-//     taskIds.forEach((taskId) => {
-//         let taskObj = await getDoc(doc(db, "tasks", taskId))
-//     })
-// }
