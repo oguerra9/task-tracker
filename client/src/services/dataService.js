@@ -62,7 +62,12 @@ class DataService {
         let currUser = localStorage.getItem('username');
         let taskRef = doc(db, 'users', currUser, 'tasks', taskId);
 
-        const docRef = setDoc(taskRef, taskData);
+        const docRef = setDoc(taskRef, {
+            description: taskData.task_description,
+            due_date: taskData.task_due_date,
+            status: taskData.task_status,
+            title: taskData.task_title,
+        });
 
         console.log(`${currUser}'s task with id ${taskId} updated with ${JSON.stringify(taskData)}`);
         return docRef.id;

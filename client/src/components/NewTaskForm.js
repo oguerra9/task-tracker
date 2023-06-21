@@ -20,13 +20,28 @@ export default function NewTaskForm(props) {
     
 
     const statusOptions = ['completed', 'in_progress'];
+    console.log(`props.formMode = ${props.formMode}`);
+    console.log(`props.taskFormData = ${JSON.stringify(props.newTaskFormData)}`);
+
+    // const [addMode, setAddMode] = useState(false);
+
+    // if (props.formMode === 'add') {
+    //     setAddMode(true);
+    // }
+
+    let addMode = false;
+
+    if (props.formMode === 'add') {
+        addMode = true;
+    }
+
        
     // const handleChange = (event) => {
     //     const { name, value } = event.target;
     //     setTaskFormData({ ...newTaskFormData, [name]: value });
     // };
 
-    // const submitForm = (event) => {
+    // const submitAddForm = (event) => {
     //     event.preventDefault();
 
     //     newTaskFormData.task_due_date = new Date(newTaskFormData.task_due_date).getTime();
@@ -79,9 +94,17 @@ export default function NewTaskForm(props) {
                     </Form.Select>
                 </Form.Group>
             </Container>
-            <Button variant="primary" type="submit" onClick={props.submitForm}>
-                Add Task
-            </Button>
+
+            {addMode ? (
+                <Button variant="primary" type="submit" onClick={props.submitAddForm}>
+                    Add Task
+                </Button>
+            ) : (
+                <Button variant="primary" type="submit" onClick={props.submitEditForm}>
+                    Update Task
+                </Button>
+            )}
+            
         </Form>
     );
 }

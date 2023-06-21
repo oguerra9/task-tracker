@@ -14,6 +14,8 @@ export default function TaskDisplay() {
     let user = localStorage.getItem("username");
     const [currUser, setCurrUser] = useState(user);
 
+    const [formMode, setFormMode] = useState('');
+
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -42,7 +44,7 @@ export default function TaskDisplay() {
         setTaskFormData({ ...newTaskFormData, [name]: value });
     };
 
-    const submitForm = (event) => {
+    const submitAddForm = (event) => {
         event.preventDefault();
 
         newTaskFormData.task_due_date = new Date(newTaskFormData.task_due_date).getTime();
@@ -53,16 +55,24 @@ export default function TaskDisplay() {
         });
 
         handleClose();
+        clearForm();
+        setRefresh(true);
 
-        setTaskFormData(
-            { 
-                task_title: '',
-                task_description: '',
-                task_due_date: '',
-                task_status: '',
-            }
-        );
+    };
 
+    const submitEditForm = (event) => {
+        event.preventDefault();
+
+        console.log('edit submitted');
+        console.log(newTaskFormData);
+
+        (DataService.updateTask(newTaskFormData.task_id, newTaskFormData)).then((response) => {
+            console.log(`task updated`);
+            console.log(`response: ${response}`);
+        });
+        
+        handleClose();
+        clearForm();
         setRefresh(true);
 
     };
@@ -82,13 +92,9 @@ export default function TaskDisplay() {
     const deleteTask = (event) => {
         let taskId = event.target.name;
         console.log(`delete id ${taskId}`);
-        let taskLine = document.getElementById(taskId);
-        taskLine.remove();
-        let taskArr = userTasks;
         (DataService.deleteTask(taskId)).then((response) => {
             console.log(response);
-            taskArr.splice(event.target.name);
-            setUserTasks(taskArr);
+            setRefresh(true);
         });
     };
 
@@ -100,6 +106,39 @@ export default function TaskDisplay() {
         });
     };
 
+    const showEditForm = (event) => {
+        let task = event.target.name;
+        console.log(`edit task: ${JSON.stringify(task)}`);
+        task = JSON.parse(task);
+        setTaskFormData({
+            task_id: task.id,
+            task_title: task.title,
+            task_description: task.description,
+            task_due_date: task.due_date,
+            task_status: task.status,
+        });
+        console.log(`task form data: ${JSON.stringify(newTaskFormData)}`);
+        setFormMode('edit');
+        handleShow();
+
+    };
+
+    const clearForm = () => {
+        setTaskFormData(
+            { 
+                task_title: '',
+                task_description: '',
+                task_due_date: '',
+                task_status: '',
+            }
+        );
+    };
+
+    const showAddForm = () => {
+        clearForm();
+        setFormMode('add');
+        handleShow();
+    };
 
 
     return (
@@ -116,7 +155,7 @@ export default function TaskDisplay() {
                                 <h1>{user}'s Tasks</h1>
                             </Col>
                             <Col>
-                                <Button onClick={handleShow}>+</Button>
+                                <Button onClick={showAddForm}>+</Button>
                             </Col>
                         </Row>
                     </Container>
@@ -135,7 +174,12 @@ export default function TaskDisplay() {
                                 <Col className="col-lg-2" style={{'border':'1px solid black'}}>{task.due_date}</Col>
                                 <Col className="col-lg-3" style={{'border':'1px solid black'}}>{task.status}</Col>
                                 <Col className="col-lg-1" style={{'border':'1px solid black'}}>
-                                    <Button name={task.id} onClick={deleteTask}>X</Button>
+                                    <Col>
+                                        <Button name={task.id} onClick={deleteTask}>X</Button>
+                                    </Col>
+                                    <Col>
+                                        <Button name={JSON.stringify(task)} onClick={showEditForm}>Edit</Button>
+                                    </Col>
                                 </Col>
                             </Row>
                         ))}
@@ -149,9 +193,11 @@ export default function TaskDisplay() {
                 </Modal.Header>
                 <Modal.Body>
                     <NewTaskForm 
+                        formMode={formMode}
                         newTaskFormData={newTaskFormData}
                         handleChange={handleChange}
-                        submitForm={submitForm}
+                        submitAddForm={submitAddForm}
+                        submitEditForm={submitEditForm}
                         setTaskFormData={setTaskFormData}
                     />
                 </Modal.Body>
