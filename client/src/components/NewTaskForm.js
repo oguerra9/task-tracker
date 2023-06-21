@@ -17,6 +17,7 @@ export default function NewTaskForm() {
             task_status: '',
         }
     ); 
+    
 
     const statusOptions = ['completed', 'in_progress'];
        
@@ -25,17 +26,17 @@ export default function NewTaskForm() {
         setTaskFormData({ ...newTaskFormData, [name]: value });
     };
 
-    const submitForm = (event) => {
-        event.preventDefault();
+    // const submitForm = (event) => {
+    //     event.preventDefault();
 
-        newTaskFormData.task_due_date = new Date(newTaskFormData.task_due_date).getTime();
-        console.log(JSON.stringify(newTaskFormData));
+    //     newTaskFormData.task_due_date = new Date(newTaskFormData.task_due_date).getTime();
+    //     console.log(JSON.stringify(newTaskFormData));
 
-        (DataService.addTask(newTaskFormData)).then((response) => {
-            console.log(`task created`);
-        });
+    //     (DataService.addTask(newTaskFormData)).then((response) => {
+    //         console.log(`task created`);
+    //     });
 
-    };
+    // };
 
     return (
         <Form>

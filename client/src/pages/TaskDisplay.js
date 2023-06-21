@@ -5,8 +5,9 @@ import Modal from 'react-bootstrap/Modal';
 import NewTaskForm from '../components/NewTaskForm';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import DataService from '../services/dataService';
 
-import { collection, getDocs, getDoc, doc } from "firebase/firestore";
+import { collection, getDocs, getDoc, doc, deleteDoc } from "firebase/firestore";
 import { db } from '../firebase';
 
 export default function TaskDisplay() {
@@ -21,6 +22,8 @@ export default function TaskDisplay() {
     const [userData, setUserData] = useState({});
     const [loading, setLoading] = useState(true);
     const [userExists, setUserExists] = useState(null);
+
+    const [refresh, setRefresh] = useState(false);
 
     const [userTasks, setUserTasks] = useState([]);
 
@@ -53,7 +56,7 @@ export default function TaskDisplay() {
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
                         console.log(doc.id, " => ", doc.data());
-                        taskArr.push(doc.data());
+                        taskArr.push({id: doc.id, ...doc.data()});
                     });
                     setUserTasks(taskArr);
                     setLoading(false);
@@ -61,10 +64,30 @@ export default function TaskDisplay() {
             
         }
             
-            
+            setRefresh(false);
             getUserData(currUser);
             console.log(userTasks);
-    }, []);
+    }, [refresh]);
+
+    // const deleteTask = (taskId) => {
+    //     console.log(taskId);
+    //     (DataService.deleteTask(taskId)).then((response) => {
+    //         console.log(`task deleted`);
+    //         console.log(response);
+    //     });
+    // };
+
+    const deleteTask = (event) => {
+        let taskId = event.target.id;
+        console.log(taskId);
+        setRefresh(true);
+        (DataService.deleteTask(taskId)).then((response) => {
+            console.log(`task deleted`);
+            console.log(response);
+        });
+    };
+
+
 
     return (
         <>
@@ -88,21 +111,22 @@ export default function TaskDisplay() {
                         <Row>
                             <Col className="col-lg-3" style={{'border':'1px solid black'}}>TITLE</Col>
                             <Col className="col-lg-3" style={{'border':'1px solid black'}}>DESCRIPTION</Col>
-                            <Col className="col-lg-3" style={{'border':'1px solid black'}}>DUE DATE</Col>
+                            <Col className="col-lg-2" style={{'border':'1px solid black'}}>DUE DATE</Col>
                             <Col className="col-lg-3" style={{'border':'1px solid black'}}>STATUS</Col>
+                            <Col className="col-lg-1"></Col>
                         </Row>
                         {userTasks.map(task => (
                             <Row key={task.id}>
                                 <Col className="col-lg-3" style={{'border':'1px solid black'}}>{task.title}</Col>
                                 <Col className="col-lg-3" style={{'border':'1px solid black'}}>{task.description}</Col>
-                                <Col className="col-lg-3" style={{'border':'1px solid black'}}>{task.due_date}</Col>
+                                <Col className="col-lg-2" style={{'border':'1px solid black'}}>{task.due_date}</Col>
                                 <Col className="col-lg-3" style={{'border':'1px solid black'}}>{task.status}</Col>
+                                <Col className="col-lg-1" style={{'border':'1px solid black'}}>
+                                    <Button id={task.id} onClick={deleteTask}>X</Button>
+                                </Col>
                             </Row>
                         ))}
-                    </Container>
-                    
-                    <p>User Data: {JSON.stringify(userData)}</p>
-                    
+                    </Container>                    
                 </Container>
             )}
 

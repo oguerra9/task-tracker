@@ -32,6 +32,14 @@ class DataService {
             status: taskData.task_status,
             title: taskData.task_title,
         });
+
+        // await setDoc(doc(db, 'users', currUser, 'tasks', docRef.id), {
+        //     id: docRef.id,
+        //     description: taskData.task_description,
+        //     due_date: taskData.task_due_date,
+        //     status: taskData.task_status,
+        //     title: taskData.task_title,
+        // });
         console.log(`Task added with ID: ${docRef.id}`);
         return docRef.id;
     }
