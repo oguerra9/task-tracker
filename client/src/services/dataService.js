@@ -33,13 +33,6 @@ class DataService {
             title: taskData.task_title,
         });
 
-        // await setDoc(doc(db, 'users', currUser, 'tasks', docRef.id), {
-        //     id: docRef.id,
-        //     description: taskData.task_description,
-        //     due_date: taskData.task_due_date,
-        //     status: taskData.task_status,
-        //     title: taskData.task_title,
-        // });
         console.log(`Task added with ID: ${docRef.id}`);
         return docRef.id;
     }
@@ -47,9 +40,6 @@ class DataService {
     async addUser(userName) {
         let userRef = doc(db, 'users', userName);
         
-        // const docRef = await addDoc(userRef, {
-        //     name: userName,
-        // });
         const docRef = await setDoc(userRef, {
             name: userName
         });
@@ -77,6 +67,33 @@ class DataService {
         console.log(`${currUser}'s task with id ${taskId} updated with ${JSON.stringify(taskData)}`);
         return docRef.id;
 
+    }
+
+    async getUserTasks() {
+        // if (!localStorage.hasOwnProperty('username')) {
+        //     window.location.href = '/';
+        // }
+
+        let username = localStorage.getItem('username');
+
+        let docRef = doc(db, 'users', username);
+        let tasksRef = collection(db, 'users', username, 'tasks');
+        let taskArr = [];
+
+        await getDocs(tasksRef) 
+            .then((querySnapshot) => {
+                let index = 1;
+                querySnapshot.forEach((doc) => {
+                    console.log(doc.id, " => ", doc.data());
+                    taskArr.push({index: index, id: doc.id, ...doc.data()});
+                    index += 1;
+                });
+                console.log(`task array: ${taskArr}`);
+                //return taskArr;
+            })
+        
+        console.log(`tasks: ${taskArr}`);
+        return taskArr;
     }
 
 }

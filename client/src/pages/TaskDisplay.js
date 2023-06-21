@@ -67,52 +67,36 @@ export default function TaskDisplay() {
 
     };
 
-    const [displayTasks, setDisplayTasks] = useState([]);
-
     useEffect(() => {
-        async function getUserData(username) {
-            if (!localStorage.hasOwnProperty('username')) {
-                window.location.href = '/';
-            }
-
-            let docRef = doc(db, 'users', username);
-            let tasksRef = collection(db, 'users', username, 'tasks');
-            let taskArr = [];
-
-            await getDocs(tasksRef) 
-                .then((querySnapshot) => {
-                    let index = 1;
-                    querySnapshot.forEach((doc) => {
-                        console.log(doc.id, " => ", doc.data());
-                        taskArr.push({index: index, id: doc.id, ...doc.data()});
-                        index += 1;
-                    });
-                    setUserTasks(taskArr);
-                    console.log(`taskArr: ${JSON.stringify(taskArr)}`);
-                    setLoading(false);
-                })
             
+        if (!localStorage.hasOwnProperty('username')) {
+            window.location.href = '/';
         }
-            
-            setRefresh(false);
-            getUserData(currUser);
-            console.log(userTasks);
+        
+        setRefresh(false);
+        getTasks();
+
     }, [refresh]); 
 
 
     const deleteTask = (event) => {
         let taskId = event.target.name;
         console.log(`delete id ${taskId}`);
-        console.log(`delete target ${event.target.name}`);
         let taskLine = document.getElementById(taskId);
         taskLine.remove();
         let taskArr = userTasks;
         (DataService.deleteTask(taskId)).then((response) => {
-            console.log(`task deleted`);
             console.log(response);
             taskArr.splice(event.target.name);
             setUserTasks(taskArr);
-            console.log(`userTasks: ${JSON.stringify(userTasks)}`);
+        });
+    };
+
+    const getTasks = async () => {
+        await (DataService.getUserTasks()).then((response) => {
+            console.log(response);
+            setUserTasks(response);
+            setLoading(false);
         });
     };
 
