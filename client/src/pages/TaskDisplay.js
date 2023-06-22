@@ -54,7 +54,6 @@ export default function TaskDisplay() {
         event.preventDefault();
 
         newTaskFormData.task_due_date = new Date(newTaskFormData.task_due_date).getTime();
-        console.log(JSON.stringify(newTaskFormData));
 
         (DataService.addTask(newTaskFormData)).then((response) => {
             console.log(`task created`);
@@ -69,12 +68,8 @@ export default function TaskDisplay() {
     const submitEditForm = (event) => {
         event.preventDefault();
 
-        console.log('edit submitted');
-        console.log(newTaskFormData);
-
         (DataService.updateTask(newTaskFormData.task_id, newTaskFormData)).then((response) => {
             console.log(`task updated`);
-            console.log(`response: ${response}`);
         });
         
         handleClose();
@@ -83,7 +78,6 @@ export default function TaskDisplay() {
     };
 
     useEffect(() => {
-        console.log(`use effect called`);
             
         if (!localStorage.hasOwnProperty('username')) {
             window.location.href = '/';
@@ -99,16 +93,13 @@ export default function TaskDisplay() {
         let taskId = event.target.name;
         console.log(`delete id ${taskId}`);
         (DataService.deleteTask(taskId)).then((response) => {
-            console.log(response);
             setRefresh(true);
         });
     };
 
     const getTasks = async () => {
         await (DataService.getUserTasks()).then((response) => {
-            console.log(`tasks from db = ${JSON.stringify(response)}`);
             let sortedTasks = sortTasks(response);
-            console.log(`sorted tasks from db = ${JSON.stringify(sortedTasks)}`)
             setUserTasks(sortedTasks);
             setLoading(false);
         });
@@ -121,8 +112,10 @@ export default function TaskDisplay() {
             sortedTaskArr = taskArr.sort((task1, task2) => (task1.title > task2.title) ? 1 : (task1.title < task2.title) ? -1 : 0);
         } else if (sortMode === 'status') {
             sortedTaskArr = taskArr.sort((task1, task2) => (task1.status < task2.status) ? 1 : (task1.status > task2.status) ? -1 : 0);
-        } else if (sortMode === 'due_date') {
-            sortedTaskArr = taskArr.sort((task1, task2) => (task1.due_date < task2.due_date) ? 1 : (task1.due_date > task2.due_date) ? -1 : 0);
+        } else if (sortMode === 'due-date') {
+            console.log('due date sort selected');
+            sortedTaskArr = taskArr.sort((task1, task2) => (task1.due_date > task2.due_date) ? 1 : (task1.due_date < task2.due_date) ? -1 : 0);
+            // sortedTaskArr = taskArr.sort((task1, task2) => (task1.display_date < task2.display_date) ? 1 : (task1.display_date > task2.display_date) ? -1 : 0);
         } else {
             return taskArr;
         }
@@ -144,6 +137,12 @@ export default function TaskDisplay() {
         setFormMode('edit');
         handleShow();
 
+    };
+
+    const displayDate = (dueDateTS) => {
+        let tsDate = new Date(dueDateTS);
+        let dateString = `${tsDate.getMonth() + 1}/${tsDate.getDate()}/${tsDate.getFullYear()}`;
+        return dateString;
     };
 
     const clearForm = () => {
@@ -174,22 +173,21 @@ export default function TaskDisplay() {
                 <Container>
                     <Container>
                         <Row>
-                            <Col>
                                 <h1>{user}'s Tasks</h1>
-                            </Col>
+                        </Row>
+                        <Row>
                             <Col>
-                                <Button onClick={showAddForm}>+</Button>
+                                <Button className="m-1" onClick={showAddForm}>➕</Button>
                             </Col>
                             <Col>
                                 <Form>
                                     <Form.Group 
-                                        className="mb-3"  
+                                        className="mb-1"  
                                         name="sort_mode" 
                                         controlId="sort_mode"
                                         value={sortMode} 
                                         onChange={(e) => {setSortMode(e.target.value)}}
                                     >
-                                        <Form.Label>Sort</Form.Label>
                                         <Form.Select>
                                             <option key='default' value='default'>Default</option>
                                             {sortingModes.map(mode => (
@@ -202,13 +200,6 @@ export default function TaskDisplay() {
                         </Row>
                     </Container>
                     <Container className="taskTable">
-                        {/* <Row className="taskLine">
-                            <Col className="taskHeader col-lg-3">TITLE</Col>
-                            <Col className="taskHeader col-lg-4">DESCRIPTION</Col>
-                            <Col className="taskHeader col-lg-2">DUE DATE</Col>
-                            <Col className="taskHeader col-lg-2">STATUS</Col>
-                            <Col className="taskHeader col-lg-1"></Col>
-                        </Row> */}
                         {userTasks.map(task => (
                             <Row key={task.id} id={task.id} className="taskLine">
                                 <Col className="taskInfo col-lg-10">
@@ -216,25 +207,19 @@ export default function TaskDisplay() {
                                     <Row className="taskDesc">{task.description}</Row>
                                     <Row className="taskStatus">{task.status}</Row>
                                 </Col>
-                                <Col className="taskOptions col-lg-2 d-flex justify-content-end">
-                                    <Row className="taskDate justify-content-end align-self-baseline">{task.due_date}</Row>
-                                    <Row className="taskOptions d-flex justify-content-end align-self-end">
-                                        <Button className="col-lg-4 m-1" name={task.id} onClick={deleteTask}>X</Button>
-                                        <Button className="col-lg-4 m-1" name={JSON.stringify(task)} onClick={showEditForm}>Edit</Button>
+                                <Col className="taskOptions col-lg-2 d-flex align-items-end flex-column">
+                                    <Row className="taskDate d-inline-flex align-self-end m-1 mb-auto">{displayDate(task.due_date)}</Row>
+                                    {/* <Row className="taskOptions d-inline-flex justify-content-end align-self-end"> */}
+                                    <Row className="taskOptions d-inline-flex justify-content-end align-self-end">
+                                        <Button className="col-lg-4 m-1 d-flex justify-content-center" name={task.id} onClick={deleteTask}>🗑️</Button>
+                                        <Button className="col-lg-4 m-1 d-flex justify-content-center" name={JSON.stringify(task)} onClick={showEditForm}>✏️</Button>
                                     </Row>
                                 </Col>
-                                {/* <Col className="taskTitle col-lg-3">{task.title}</Col>
-                                <Col className="taskDesc col-lg-4">{task.description}</Col>
-                                <Col className="taskDate col-lg-2">{task.due_date}</Col>
-                                <Col className="taskStatus col-lg-2">{task.status}</Col>
-                                <Col className="taskButtons col-lg-1">
-                                    <Row>
-                                        <Col>
-                                            <Button name={task.id} onClick={deleteTask}>X</Button>
-                                        </Col>
-                                        <Col>
-                                            <Button name={JSON.stringify(task)} onClick={showEditForm}>Edit</Button>
-                                        </Col>
+                                {/* <Col className="taskOptions col-lg-2">
+                                    <Row className="taskDate d-inline-flex">{displayDate(task.due_date)}</Row>
+                                    <Row className="taskOptions">
+                                        <Button className="col-lg-4 m-1 d-flex justify-content-center" name={task.id} onClick={deleteTask}>🗑️</Button>
+                                        <Button className="col-lg-4 m-1 d-flex justify-content-center" name={JSON.stringify(task)} onClick={showEditForm}>✏️</Button>
                                     </Row>
                                 </Col> */}
                             </Row>
@@ -262,4 +247,6 @@ export default function TaskDisplay() {
     );
 
 }
+// delete icons ✕✖️🗑️
+// edit icons 🔧⚙️✏️✂️
 

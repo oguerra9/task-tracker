@@ -103,9 +103,12 @@ export default function Login() {
     };
 
     return (
-        <Container style={{'backgroundColor':'white', 'border':'1px solid blue'}}>
-            <Button onClick={handleShowLogin}>Login</Button>
-            <Button onClick={handleShowSignUp}>Sign Up</Button>
+        <Container style={{'backgroundColor':'white'}}>
+            <Container className="d-flex flex-column align-items-center">
+                <Button className="m-2 col-lg-4" onClick={handleShowLogin}>Login</Button>
+                <Button className="m-2 col-lg-4" onClick={handleShowSignUp}>Sign Up</Button>
+            </Container>
+            
 
             <Modal show={showLogin} onHide={handleCloseLogin}>
                 <Modal.Header closeButton>

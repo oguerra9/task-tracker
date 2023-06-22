@@ -1,6 +1,7 @@
 import { collection, getDocs, getDoc, doc, setDoc, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from '../firebase';
 
+
 class DataService {
     async getUser(username) {
         await getDoc(doc(db, "users", username))
@@ -9,20 +10,7 @@ class DataService {
             })
     }
 
-    // async getAllTasks() {
-    //     let currUser = localStorage.getItem('username');
-    //     let tasksRef = collection(db, 'users', currUser, 'tasks');
-
-    //     const docRef = await getDocs(tasksRef)
-    // }
-
     async addTask(taskData) {
-        /*
-            task_title: '',
-            task_description: '',
-            task_due_date: '',
-            task_status: '',
-        */
         let currUser = localStorage.getItem('username');
         let userRef = collection(db, "users", currUser, "tasks");
 
@@ -75,9 +63,6 @@ class DataService {
     }
 
     async getUserTasks() {
-        // if (!localStorage.hasOwnProperty('username')) {
-        //     window.location.href = '/';
-        // }
 
         let username = localStorage.getItem('username');
 
@@ -94,7 +79,6 @@ class DataService {
                     index += 1;
                 });
                 console.log(`task array: ${taskArr}`);
-                //return taskArr;
             })
         
         console.log(`tasks: ${taskArr}`);
