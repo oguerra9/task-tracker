@@ -6,16 +6,12 @@ import NewTaskForm from '../components/NewTaskForm';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
-import Dropdown from 'react-bootstrap/Dropdown';
 import DataService from '../services/dataService';
 import '../style.css';
 
-import { collection, getDocs, getDoc, doc, deleteDoc } from "firebase/firestore";
-import { db } from '../firebase';
 
 export default function TaskDisplay() {
     let user = localStorage.getItem("username");
-    //const [currUser, setCurrUser] = useState(user);
 
     const [formMode, setFormMode] = useState('');
 
@@ -27,15 +23,11 @@ export default function TaskDisplay() {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    //const [userData, setUserData] = useState({});
     const [loading, setLoading] = useState(true);
-    //const [userExists, setUserExists] = useState(null);
 
-    const [refresh, setRefresh] = useState(false);
+    const [refresh, setRefresh] = useState(true);
 
     const [userTasks, setUserTasks] = useState([]);
-    //const [hasTasks, setHasTasks] = useState(false);
-    //const [displayUserTasks, setDisplayUserTasks] = useState([]);
 
     const [newTaskFormData, setTaskFormData] = useState(
         { 
@@ -51,9 +43,11 @@ export default function TaskDisplay() {
         setTaskFormData({ ...newTaskFormData, [name]: value });
     };
 
+
+
     const submitAddForm = (event) => {
         event.preventDefault();
-        
+
         (DataService.addTask(newTaskFormData)).then((response) => {
             console.log(`task created`);
         });
@@ -64,10 +58,12 @@ export default function TaskDisplay() {
 
     };
 
-    const submitEditForm = (event) => {
+    const submitEditForm = async (event) => {
         event.preventDefault();
 
-        (DataService.updateTask(newTaskFormData.task_id, newTaskFormData)).then((response) => {
+        console.log(`edit task form submitted with data: ${JSON.stringify(newTaskFormData)}`);
+
+        await (DataService.updateTask(newTaskFormData.task_id, newTaskFormData)).then((response) => {
             console.log(`task updated`);
         });
         
@@ -77,13 +73,17 @@ export default function TaskDisplay() {
     };
 
     useEffect(() => {
+        if (refresh === true) {
+            console.log(`useEffect called`);
             
-        if (!localStorage.hasOwnProperty('username')) {
-            window.location.href = '/';
-        }
+            if (!localStorage.hasOwnProperty('username')) {
+                window.location.href = '/';
+            }
         
-        setRefresh(false);
-        getTasks();
+            getTasks();
+        
+            setRefresh(false);
+        }
 
     }, [refresh, sortMode]); 
 
@@ -97,13 +97,9 @@ export default function TaskDisplay() {
     };
 
     const getTasks = async () => {
+        console.log('getTasks called');
         await (DataService.getUserTasks()).then((response) => {
             let sortedTasks = sortTasks(response);
-            // if (sortedTasks.length > 0) {
-            //     setHasTasks(true);
-            // } else {
-            //     setHasTasks(false);
-            // }
             setUserTasks(sortedTasks);
             setLoading(false);
         });
@@ -117,9 +113,7 @@ export default function TaskDisplay() {
         } else if (sortMode === 'status') {
             sortedTaskArr = taskArr.sort((task1, task2) => (task1.status < task2.status) ? 1 : (task1.status > task2.status) ? -1 : 0);
         } else if (sortMode === 'due-date') {
-            console.log('due date sort selected');
             sortedTaskArr = taskArr.sort((task1, task2) => (task1.due_date > task2.due_date) ? 1 : (task1.due_date < task2.due_date) ? -1 : 0);
-            // sortedTaskArr = taskArr.sort((task1, task2) => (task1.display_date < task2.display_date) ? 1 : (task1.display_date > task2.display_date) ? -1 : 0);
         } else {
             return taskArr;
         }
@@ -128,7 +122,6 @@ export default function TaskDisplay() {
 
     const showEditForm = (event) => {
         let task = event.target.name;
-        console.log(`edit task: ${JSON.stringify(task)}`);
         task = JSON.parse(task);
         setTaskFormData({
             task_id: task.id,
@@ -137,7 +130,6 @@ export default function TaskDisplay() {
             task_due_date: task.due_date,
             task_status: task.status,
         });
-        console.log(`task form data: ${JSON.stringify(newTaskFormData)}`);
         setFormMode('edit');
         handleShow();
 
@@ -145,6 +137,8 @@ export default function TaskDisplay() {
 
     const displayDate = (dueDateTS) => {
         let tsDate = new Date(dueDateTS);
+        tsDate.setDate(tsDate.getDate() + 1);        
+
         let dateString = `${tsDate.getMonth() + 1}/${tsDate.getDate()}/${tsDate.getFullYear()}`;
         return dateString;
     };
@@ -236,8 +230,6 @@ export default function TaskDisplay() {
                     />
                 </Modal.Body>
             </Modal>
-
-            {/* <Button id="addTaskButton" className="rounded-circle" onClick={showAddForm}>+</Button> */}
             <Button id="addTaskButton" onClick={showAddForm}><h1 className="m-0 p-0 d-inline">+</h1></Button>
         </>
     );

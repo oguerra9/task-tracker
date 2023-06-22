@@ -78,16 +78,17 @@ export default function NewTaskForm(props) {
                 </Form.Group>
             </Container>
             <Container>
-                <Form.Group>
+                <Form.Group 
+                    controlId="task_status"
+                >
                     <Form.Label>Status</Form.Label>
                     <Form.Select
                         className="mb-3"  
                         name="task_status" 
-                        controlId="task_status"
                         value={props.newTaskFormData.task_status} 
                         onChange={(e) => {props.setTaskFormData({ ...props.newTaskFormData, task_status: e.target.value })}}
                     >
-                        <option value="" disabled selected>Select</option>
+                        <option value="" disabled>Select</option>
                         {statusOptions.map(status => (
                             <option key={status} value={status}>{status}</option>
                         ))}

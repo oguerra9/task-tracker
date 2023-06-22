@@ -4,6 +4,7 @@ import { db } from '../firebase';
 
 class DataService {
     async getUser(username) {
+        console.log(`getUser called in DS`);
         await getDoc(doc(db, "users", username))
             .then((querySnapshot)=>{               
                 return querySnapshot.data();
@@ -11,6 +12,7 @@ class DataService {
     }
 
     async addTask(taskData) {
+        console.log(`addTask called in DS`);
         let currUser = localStorage.getItem('username');
         let userRef = collection(db, "users", currUser, "tasks");
 
@@ -50,7 +52,13 @@ class DataService {
         let currUser = localStorage.getItem('username');
         let taskRef = doc(db, 'users', currUser, 'tasks', taskId);
 
-        const docRef = setDoc(taskRef, {
+        // const docRef = setDoc(taskRef, {
+        //     description: taskData.task_description,
+        //     due_date: taskData.task_due_date,
+        //     status: taskData.task_status,
+        //     title: taskData.task_title,
+        // });
+        await setDoc(taskRef, {
             description: taskData.task_description,
             due_date: taskData.task_due_date,
             status: taskData.task_status,
@@ -58,12 +66,13 @@ class DataService {
         });
 
         console.log(`${currUser}'s task with id ${taskId} updated with ${JSON.stringify(taskData)}`);
-        return docRef.id;
+        //return docRef.id;
 
     }
 
     async getUserTasks() {
 
+        console.log(`getUserTasks called in DS`);
         let username = localStorage.getItem('username');
 
         //let docRef = doc(db, 'users', username);
