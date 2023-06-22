@@ -34,6 +34,7 @@ export default function TaskDisplay() {
     const [refresh, setRefresh] = useState(false);
 
     const [userTasks, setUserTasks] = useState([]);
+    //const [hasTasks, setHasTasks] = useState(false);
     //const [displayUserTasks, setDisplayUserTasks] = useState([]);
 
     const [newTaskFormData, setTaskFormData] = useState(
@@ -100,6 +101,11 @@ export default function TaskDisplay() {
     const getTasks = async () => {
         await (DataService.getUserTasks()).then((response) => {
             let sortedTasks = sortTasks(response);
+            // if (sortedTasks.length > 0) {
+            //     setHasTasks(true);
+            // } else {
+            //     setHasTasks(false);
+            // }
             setUserTasks(sortedTasks);
             setLoading(false);
         });
@@ -172,17 +178,18 @@ export default function TaskDisplay() {
             ) : (
                 <Container>
                     <Container>
-                        <Row>
+                        {/* <Row>
                                 <h1>{user}'s Tasks</h1>
-                        </Row>
-                        <Row>
-                            <Col>
-                                <Button className="m-1" onClick={showAddForm}>➕</Button>
+                        </Row> */}
+                        <Row className='d-flex'>
+                            <Col className="d-inline-flex">
+                                {/* <Button className="m-1 d-inline-flex justify-content-center align-self-center" onClick={showAddForm} style={{'fontSize':'24px', 'fontStyle':'bolder'}}>+</Button> */}
+                                <h1>{user}'s Tasks</h1>
                             </Col>
-                            <Col>
+                            <Col className="d-flex justify-content-end align-self-end">
                                 <Form>
                                     <Form.Group 
-                                        className="mb-1"  
+                                        className="mb-1 d-inline-flex"  
                                         name="sort_mode" 
                                         controlId="sort_mode"
                                         value={sortMode} 
@@ -224,7 +231,7 @@ export default function TaskDisplay() {
                                 </Col> */}
                             </Row>
                         ))}
-                    </Container>                    
+                    </Container>    
                 </Container>
             )}
 
@@ -243,6 +250,9 @@ export default function TaskDisplay() {
                     />
                 </Modal.Body>
             </Modal>
+
+            {/* <Button id="addTaskButton" className="rounded-circle" onClick={showAddForm}>+</Button> */}
+            <Button id="addTaskButton" onClick={showAddForm}><h1 className="m-0 p-0 d-inline">+</h1></Button>
         </>
     );
 

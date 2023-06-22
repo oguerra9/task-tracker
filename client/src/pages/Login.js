@@ -120,6 +120,7 @@ export default function Login() {
                             <Col>
                                 <Form.Group className="mb-3" controlId="username">
                                     <Form.Control placeholder="username" type="text" name="username" value={username} onChange={handleChange} style={{'border':'1px solid blue'}} />
+                                    <Form.Text text="muted">* Usernames are case sensitive.</Form.Text>
                                 </Form.Group>
                             </Col>
                             <Col>
@@ -147,6 +148,7 @@ export default function Login() {
                             <Col>
                                 <Form.Group className="mb-3" controlId="username">
                                     <Form.Control placeholder="username" type="text" name="username" value={username} onChange={handleChange} style={{'border':'1px solid blue'}} />
+                                    <Form.Text text="muted">* Usernames are case sensitive.</Form.Text>
                                 </Form.Group>
                             </Col>
                             <Col>
