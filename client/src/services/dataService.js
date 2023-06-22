@@ -66,7 +66,7 @@ class DataService {
 
         let username = localStorage.getItem('username');
 
-        let docRef = doc(db, 'users', username);
+        //let docRef = doc(db, 'users', username);
         let tasksRef = collection(db, 'users', username, 'tasks');
         let taskArr = [];
 
@@ -74,14 +74,14 @@ class DataService {
             .then((querySnapshot) => {
                 let index = 1;
                 querySnapshot.forEach((doc) => {
-                    console.log(doc.id, " => ", doc.data());
+                    //console.log(doc.id, " => ", doc.data());
                     taskArr.push({index: index, id: doc.id, ...doc.data()});
                     index += 1;
                 });
-                console.log(`task array: ${taskArr}`);
+                //console.log(`task array: ${taskArr}`);
             })
         
-        console.log(`tasks: ${taskArr}`);
+        //console.log(`tasks: ${taskArr}`);
         return taskArr;
     }
 

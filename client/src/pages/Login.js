@@ -43,11 +43,11 @@ export default function Login() {
             const docRef = await getDoc(userRef)
                 .then((querySnapshot) => {
                     if (querySnapshot.exists()) {
-                        console.log(`user ${username} found`);
+                        //console.log(`user ${username} found`);
                         localStorage.setItem("username", username);
                         window.location.href = 'taskDisplay';
                     } else {
-                        console.log(`user ${username} not found`);
+                        //console.log(`user ${username} not found`);
                         //setUsername('');
                         handleShowLIAlert();
                         setSubmitted(false);
@@ -61,12 +61,12 @@ export default function Login() {
             const docRef = await getDoc(userRef)
                 .then((querySnapshot) => {
                     if (querySnapshot.exists()) {
-                        console.log(`${username} already exists`);
+                        //console.log(`${username} already exists`);
                         handleShowSUAlert();
                         setSubmittedSU(false);
                     } else {
                         (DataService.addUser(username)).then((response) => {
-                            console.log(`called add user`);
+                            //console.log(`called add user`);
                             console.log(response);
                         });
                         localStorage.setItem('username', username);

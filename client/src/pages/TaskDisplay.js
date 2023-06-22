@@ -53,9 +53,7 @@ export default function TaskDisplay() {
 
     const submitAddForm = (event) => {
         event.preventDefault();
-
-        newTaskFormData.task_due_date = new Date(newTaskFormData.task_due_date).getTime();
-
+        
         (DataService.addTask(newTaskFormData)).then((response) => {
             console.log(`task created`);
         });
@@ -178,12 +176,8 @@ export default function TaskDisplay() {
             ) : (
                 <Container>
                     <Container>
-                        {/* <Row>
-                                <h1>{user}'s Tasks</h1>
-                        </Row> */}
                         <Row className='d-flex'>
                             <Col className="d-inline-flex">
-                                {/* <Button className="m-1 d-inline-flex justify-content-center align-self-center" onClick={showAddForm} style={{'fontSize':'24px', 'fontStyle':'bolder'}}>+</Button> */}
                                 <h1>{user}'s Tasks</h1>
                             </Col>
                             <Col className="d-flex justify-content-end align-self-end">
@@ -216,19 +210,11 @@ export default function TaskDisplay() {
                                 </Col>
                                 <Col className="taskOptions col-lg-2 d-flex align-items-end flex-column">
                                     <Row className="taskDate d-inline-flex align-self-end m-1 mb-auto">{displayDate(task.due_date)}</Row>
-                                    {/* <Row className="taskOptions d-inline-flex justify-content-end align-self-end"> */}
                                     <Row className="taskOptions d-inline-flex justify-content-end align-self-end">
                                         <Button className="col-lg-4 m-1 d-flex justify-content-center" name={task.id} onClick={deleteTask}>🗑️</Button>
                                         <Button className="col-lg-4 m-1 d-flex justify-content-center" name={JSON.stringify(task)} onClick={showEditForm}>✏️</Button>
                                     </Row>
                                 </Col>
-                                {/* <Col className="taskOptions col-lg-2">
-                                    <Row className="taskDate d-inline-flex">{displayDate(task.due_date)}</Row>
-                                    <Row className="taskOptions">
-                                        <Button className="col-lg-4 m-1 d-flex justify-content-center" name={task.id} onClick={deleteTask}>🗑️</Button>
-                                        <Button className="col-lg-4 m-1 d-flex justify-content-center" name={JSON.stringify(task)} onClick={showEditForm}>✏️</Button>
-                                    </Row>
-                                </Col> */}
                             </Row>
                         ))}
                     </Container>    

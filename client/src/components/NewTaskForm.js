@@ -20,8 +20,8 @@ export default function NewTaskForm(props) {
     
 
     const statusOptions = ['completed', 'in_progress'];
-    console.log(`props.formMode = ${props.formMode}`);
-    console.log(`props.taskFormData = ${JSON.stringify(props.newTaskFormData)}`);
+    //console.log(`props.formMode = ${props.formMode}`);
+    //console.log(`props.taskFormData = ${JSON.stringify(props.newTaskFormData)}`);
 
     // const [addMode, setAddMode] = useState(false);
 
@@ -78,16 +78,16 @@ export default function NewTaskForm(props) {
                 </Form.Group>
             </Container>
             <Container>
-                <Form.Group 
-                    className="mb-3"  
-                    name="task_status" 
-                    controlId="task_status"
-                    value={props.newTaskFormData.task_status} 
-                    onChange={(e) => {props.setTaskFormData({ ...props.newTaskFormData, task_status: e.target.value })}}
-                >
+                <Form.Group>
                     <Form.Label>Status</Form.Label>
-                    <Form.Select>
-                        <option>Select</option>
+                    <Form.Select
+                        className="mb-3"  
+                        name="task_status" 
+                        controlId="task_status"
+                        value={props.newTaskFormData.task_status} 
+                        onChange={(e) => {props.setTaskFormData({ ...props.newTaskFormData, task_status: e.target.value })}}
+                    >
+                        <option value="" disabled selected>Select</option>
                         {statusOptions.map(status => (
                             <option key={status} value={status}>{status}</option>
                         ))}
