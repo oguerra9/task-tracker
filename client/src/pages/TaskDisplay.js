@@ -6,6 +6,7 @@ import NewTaskForm from '../components/NewTaskForm';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
+import TaskList from '../components/TaskList';
 import DataService from '../services/dataService';
 import '../style.css';
 
@@ -133,13 +134,13 @@ export default function TaskDisplay() {
 
     };
 
-    const displayDate = (dueDateTS) => {
-        let tsDate = new Date(dueDateTS);
-        tsDate.setDate(tsDate.getDate() + 1);        
+    // const displayDate = (dueDateTS) => {
+    //     let tsDate = new Date(dueDateTS);
+    //     tsDate.setDate(tsDate.getDate() + 1);        
 
-        let dateString = `${tsDate.getMonth() + 1}/${tsDate.getDate()}/${tsDate.getFullYear()}`;
-        return dateString;
-    };
+    //     let dateString = `${tsDate.getMonth() + 1}/${tsDate.getDate()}/${tsDate.getFullYear()}`;
+    //     return dateString;
+    // };
 
     const clearForm = () => {
         setTaskFormData(
@@ -192,7 +193,12 @@ export default function TaskDisplay() {
                             </Col>
                         </Row>
                     </Container>
-                    <Container className="taskTable">
+                    <TaskList 
+                        userTasks={userTasks}
+                        deleteTask={deleteTask}
+                        showEditForm={showEditForm}
+                    />
+                    {/* <Container className="taskTable">
                         {userTasks.map(task => (
                             <Row key={task.id} id={task.id} className="taskLine">
                                 <Col className="taskInfo col-lg-10">
@@ -209,7 +215,7 @@ export default function TaskDisplay() {
                                 </Col>
                             </Row>
                         ))}
-                    </Container>    
+                    </Container>  */}  
                 </Container>
             )}
 

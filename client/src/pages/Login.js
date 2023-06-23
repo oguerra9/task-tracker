@@ -79,7 +79,7 @@ export default function Login() {
 
     return (
         <Container style={{'backgroundColor':'white'}}>
-            <Container className="d-flex flex-column align-items-center">
+            <Container className="d-flex flex-column align-items-center m-4 p-0">
                 <Button className="m-2 col-lg-4" onClick={handleShowLogin}>Login</Button>
                 <Button className="m-2 col-lg-4" onClick={handleShowSignUp}>Sign Up</Button>
             </Container>
