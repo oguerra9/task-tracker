@@ -3,11 +3,15 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import Xarrow, {useXarrow, Xwrapper} from 'react-xarrows';
 import '../style.css';
 
 export default function TaskList(props) {
 
     const displayDate = (dueDateTS) => {
+        if (dueDateTS === '') {
+            return '';
+        }
         let tsDate = new Date(dueDateTS);
         tsDate.setDate(tsDate.getDate() + 1);        
 
@@ -16,11 +20,18 @@ export default function TaskList(props) {
     };
 
     if (props.userTasks.length === 0) {
+
         return (
             <Container>
-                <Row className="m-5">
-                    <h3>Click the + to add your first task</h3>
-                </Row>
+                <h4 id="insTask" className="d-inline-flex p-2">Click the + to add your first task</h4>
+                <Xarrow 
+                    start="insTask" 
+                    end="addTaskButton" 
+                    strokeWidth={2}
+                    color={'black'}
+                    curveness={1.3}
+                    dashness={true}
+                />
             </Container>
         );
     }

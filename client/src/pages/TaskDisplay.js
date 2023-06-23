@@ -17,7 +17,7 @@ export default function TaskDisplay(props) {
     const [formMode, setFormMode] = useState('');
 
     const [sortMode, setSortMode] = useState('Sort');
-    let sortingModes = ['title', 'status', 'due-date'];
+    let sortingModes = ['Title', 'Status', 'Due Date'];
 
     const [show, setShow] = useState(false);
 
@@ -113,11 +113,11 @@ export default function TaskDisplay(props) {
 
     const sortTasks = (taskArr) => {
         let sortedTaskArr = [];
-        if (sortMode === 'title') {
+        if (sortMode === 'Title') {
             sortedTaskArr = taskArr.sort((task1, task2) => (task1.title > task2.title) ? 1 : (task1.title < task2.title) ? -1 : 0);
-        } else if (sortMode === 'status') {
+        } else if (sortMode === 'Status') {
             sortedTaskArr = taskArr.sort((task1, task2) => (task1.status < task2.status) ? 1 : (task1.status > task2.status) ? -1 : 0);
-        } else if (sortMode === 'due-date') {
+        } else if (sortMode === 'Due Date') {
             sortedTaskArr = taskArr.sort((task1, task2) => (task1.due_date > task2.due_date) ? 1 : (task1.due_date < task2.due_date) ? -1 : 0);
         } else {
             return taskArr;
@@ -173,9 +173,9 @@ export default function TaskDisplay(props) {
             ) : (
                 <Container>
                     <Container>
-                        <Row className='d-flex'>
+                        <Row className='d-flex mt-2'>
                             <Col className="d-inline-flex">
-                                <h1>{user}'s Tasks</h1>
+                                <h1 className="mb-0">{user}'s Tasks</h1>
                             </Col>
                             <Col className="d-flex justify-content-end align-self-end">
                                 <Form>
