@@ -8,12 +8,8 @@ import DataService from '../services/dataService';
 import Alert from 'react-bootstrap/alert';
 import Modal from 'react-bootstrap/modal';
 
-import { collection, getDocs, getDoc, doc } from "firebase/firestore";
-import { db } from '../firebase';
-
 export default function Login() {
     const [username, setUsername] = useState('');
-    const [logName, setLogName] = useState('');
 
     const [showLIAlert, setShowLIAlert] = useState(false);
     const handleShowLIAlert = () => setShowLIAlert(true);
@@ -36,39 +32,6 @@ export default function Login() {
     const [submittedSU, setSubmittedSU] = useState(false);
 
     useEffect(() => {
-        
-        async function getUserData(username) {
-            let userRef = doc(db, 'users', username);
-
-            const docRef = await getDoc(userRef)
-                .then((querySnapshot) => {
-                    if (querySnapshot.exists()) {
-                        localStorage.setItem("username", username);
-                        window.location.href = 'taskDisplay';
-                    } else {
-                        handleShowLIAlert();
-                        setSubmitted(false);
-                    }
-                })
-        }
-
-        async function signUpUser(username) {
-            let userRef = doc(db, 'users', username);
-
-            const docRef = await getDoc(userRef)
-                .then((querySnapshot) => {
-                    if (querySnapshot.exists()) {
-                        handleShowSUAlert();
-                        setSubmittedSU(false);
-                    } else {
-                        (DataService.addUser(username)).then((response) => {
-                            console.log(response);
-                        });
-                        localStorage.setItem('username', username);
-                        window.location.href = '/taskDisplay';
-                    }
-                })
-        }
         if (submitted) {
             getUserData(username);
         }
@@ -82,15 +45,46 @@ export default function Login() {
         setUsername(value);
     };
 
+    const getUserData = async (userName) => {
+        await (DataService.getUserStatus(userName))
+            .then((response) => {
+                if (response === true) {
+                    localStorage.setItem("username", userName);
+                    window.location.href = 'taskDisplay';
+                } else {
+                    handleShowLIAlert();
+                    setSubmitted(false);
+                }
+            });
+    };
+
+    const signUpUser = async (userName) => {
+        await (DataService.getUserStatus(userName))
+            .then((response) => {
+                if (response === true) {
+                    handleShowSUAlert();
+                    setSubmittedSU(false);
+                } else {
+                    addUser(userName);
+                    localStorage.setItem('username', userName);
+                    window.location.href = '/taskDisplay';
+                }
+            });
+    };
+
+    const addUser = async (userName) => {
+        await (DataService.addUser(userName)).then((response) => {
+
+        });
+    };
+
     const submitForm = (event) => {
         event.preventDefault();
-
         setSubmitted(true);
     };
 
     const submitSignUp = (event) => {
         event.preventDefault();
-
         setSubmittedSU(true);
     };
 

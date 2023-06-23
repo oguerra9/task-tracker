@@ -9,49 +9,14 @@ import { db } from '../firebase';
 import DataService from '../services/dataService';
 
 export default function NewTaskForm(props) {
-    // const [newTaskFormData, setTaskFormData] = useState(
-    //     { 
-    //         task_title: '',
-    //         task_description: '',
-    //         task_due_date: '',
-    //         task_status: '',
-    //     }
-    // ); 
-    
-
+   
     const statusOptions = ['completed', 'in_progress'];
-    //console.log(`props.formMode = ${props.formMode}`);
-    //console.log(`props.taskFormData = ${JSON.stringify(props.newTaskFormData)}`);
-
-    // const [addMode, setAddMode] = useState(false);
-
-    // if (props.formMode === 'add') {
-    //     setAddMode(true);
-    // }
 
     let addMode = false;
 
     if (props.formMode === 'add') {
         addMode = true;
     }
-
-       
-    // const handleChange = (event) => {
-    //     const { name, value } = event.target;
-    //     setTaskFormData({ ...newTaskFormData, [name]: value });
-    // };
-
-    // const submitAddForm = (event) => {
-    //     event.preventDefault();
-
-    //     newTaskFormData.task_due_date = new Date(newTaskFormData.task_due_date).getTime();
-    //     console.log(JSON.stringify(newTaskFormData));
-
-    //     (DataService.addTask(newTaskFormData)).then((response) => {
-    //         console.log(`task created`);
-    //     });
-
-    // };
 
     return (
         <Form>

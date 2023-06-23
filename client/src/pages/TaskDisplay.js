@@ -49,7 +49,7 @@ export default function TaskDisplay() {
         event.preventDefault();
 
         (DataService.addTask(newTaskFormData)).then((response) => {
-            console.log(`task created`);
+            console.log(`task added`);
         });
 
         handleClose();
@@ -60,8 +60,6 @@ export default function TaskDisplay() {
 
     const submitEditForm = async (event) => {
         event.preventDefault();
-
-        console.log(`edit task form submitted with data: ${JSON.stringify(newTaskFormData)}`);
 
         await (DataService.updateTask(newTaskFormData.task_id, newTaskFormData)).then((response) => {
             console.log(`task updated`);
@@ -74,7 +72,6 @@ export default function TaskDisplay() {
 
     useEffect(() => {
         if (refresh === true) {
-            console.log(`useEffect called`);
             
             if (!localStorage.hasOwnProperty('username')) {
                 window.location.href = '/';
@@ -90,16 +87,17 @@ export default function TaskDisplay() {
 
     const deleteTask = (event) => {
         let taskId = event.target.name;
-        console.log(`delete id ${taskId}`);
         (DataService.deleteTask(taskId)).then((response) => {
+            console.log(`task deleted`);
             setRefresh(true);
         });
     };
 
     const getTasks = async () => {
-        console.log('getTasks called');
         await (DataService.getUserTasks()).then((response) => {
+            console.log(`tasks retrieved`);
             let sortedTasks = sortTasks(response);
+            console.log(`tasks sorted`);
             setUserTasks(sortedTasks);
             setLoading(false);
         });

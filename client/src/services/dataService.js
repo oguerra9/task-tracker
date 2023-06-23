@@ -4,7 +4,6 @@ import { db } from '../firebase';
 
 class DataService {
     async getUser(username) {
-        console.log(`getUser called in DS`);
         await getDoc(doc(db, "users", username))
             .then((querySnapshot)=>{               
                 return querySnapshot.data();
@@ -12,7 +11,6 @@ class DataService {
     }
 
     async addTask(taskData) {
-        console.log(`addTask called in DS`);
         let currUser = localStorage.getItem('username');
         let userRef = collection(db, "users", currUser, "tasks");
 
@@ -23,7 +21,6 @@ class DataService {
             title: taskData.task_title,
         });
 
-        console.log(`Task added with ID: ${docRef.id}`);
         return docRef.id;
     }
 
@@ -34,7 +31,6 @@ class DataService {
             name: userName
         });
 
-        console.log(`user with name ${userName} and added to collection "users"`);
         return docRef;
     }
 
@@ -44,7 +40,6 @@ class DataService {
 
         await deleteDoc(taskRef);
 
-        console.log(`deleted task with id ${taskId}`);
         return taskId;
     }
 
@@ -52,12 +47,6 @@ class DataService {
         let currUser = localStorage.getItem('username');
         let taskRef = doc(db, 'users', currUser, 'tasks', taskId);
 
-        // const docRef = setDoc(taskRef, {
-        //     description: taskData.task_description,
-        //     due_date: taskData.task_due_date,
-        //     status: taskData.task_status,
-        //     title: taskData.task_title,
-        // });
         await setDoc(taskRef, {
             description: taskData.task_description,
             due_date: taskData.task_due_date,
@@ -65,33 +54,40 @@ class DataService {
             title: taskData.task_title,
         });
 
-        console.log(`${currUser}'s task with id ${taskId} updated with ${JSON.stringify(taskData)}`);
-        //return docRef.id;
 
     }
 
     async getUserTasks() {
 
-        console.log(`getUserTasks called in DS`);
         let username = localStorage.getItem('username');
 
-        //let docRef = doc(db, 'users', username);
         let tasksRef = collection(db, 'users', username, 'tasks');
         let taskArr = [];
 
         await getDocs(tasksRef) 
             .then((querySnapshot) => {
-                let index = 1;
                 querySnapshot.forEach((doc) => {
-                    //console.log(doc.id, " => ", doc.data());
-                    taskArr.push({index: index, id: doc.id, ...doc.data()});
-                    index += 1;
+                    taskArr.push({id: doc.id, ...doc.data()});
                 });
-                //console.log(`task array: ${taskArr}`);
             })
         
-        //console.log(`tasks: ${taskArr}`);
         return taskArr;
+    }
+
+    async getUserStatus(username) {
+
+        let found;
+        await getDoc(doc(db, 'users', username))
+            .then((querySnapshot) => {
+                if (querySnapshot.exists()) {
+                    console.log('user found');
+                    found = true;
+                } else {
+                    console.log('user not found');
+                    found = false;
+                }
+            })
+        return found;
     }
 
 }
