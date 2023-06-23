@@ -22,7 +22,8 @@ export default function PageHeader(props) {
 
     const logout = () => {
         localStorage.removeItem('username');
-        props.handlePageChange('login');
+        //props.handlePageChange('login');
+        window.location.href = '/task-tracker/';
         setLoggedIn(false);
     }
 
