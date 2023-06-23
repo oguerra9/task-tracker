@@ -13,11 +13,11 @@ function App() {
         <PageHeader />
         <Routes>
           <Route 
-            path="/" 
+            path="/task-tracker/" 
             element={<Login />}
           />
           <Route 
-            path="/taskDisplay" 
+            path="/task-tracker/taskDisplay" 
             element={<TaskDisplay />}
           />
         </Routes>
