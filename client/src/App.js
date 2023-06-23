@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 // import React, { useState } from 'react';
 import './App.css';
 import Login from './pages/Login';
@@ -9,19 +10,21 @@ function App() {
 
   return (
     <Router>
+      <HashRouter basename='https://oguerra9.github.io/task-tracker/'>
       <div className="flex-column justify-center align-center min-100-vh">
         <PageHeader />
         <Routes>
           <Route 
-            path="https://oguerra9.github.io/task-tracker/" 
+            path="/" 
             element={<Login />}
           />
           <Route 
-            path="https://oguerra9.github.io/task-tracker/taskDisplay" 
+            path="taskDisplay" 
             element={<TaskDisplay />}
           />
         </Routes>
       </div>
+      </HashRouter>
     </Router>
   );
 }
