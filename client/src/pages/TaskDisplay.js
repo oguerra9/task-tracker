@@ -76,8 +76,7 @@ export default function TaskDisplay(props) {
         if (refresh === true) {
             
             if (!localStorage.hasOwnProperty('username')) {
-                //props.handlePageChange('login');
-                window.location.href = '/task-tracker';
+                props.handlePageChange('login');
             }
         
             getTasks();

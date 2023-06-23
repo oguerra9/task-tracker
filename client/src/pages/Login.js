@@ -37,8 +37,7 @@ export default function Login(props) {
             .then((response) => {
                 if (response === true) {
                     localStorage.setItem("username", userName);
-                    //props.handlePageChange('taskDisplay');
-                    window.location.href = '/task-tracker/taskDisplay';
+                    props.handlePageChange('taskDisplay');
                 } else {
                     handleShowLIAlert();
                     setUsername('');
@@ -63,9 +62,7 @@ export default function Login(props) {
         console.log(`calling add user`);
         await (DataService.addUser(userName)).then((response) => {
             console.log(`user added`);
-            //props.handlePageChange('taskDisplay');
-            window.location.href = '/taskDisplay';
-            window.location.href = '/task-tracker/taskDisplay';
+            props.handlePageChange('taskDisplay');
         });
     };
 
