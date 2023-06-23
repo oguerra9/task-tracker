@@ -10,16 +10,16 @@ function App() {
 
   return (
     <Router>
-      <HashRouter basename='https://oguerra9.github.io/task-tracker/'>
+      <HashRouter basename='https://oguerra9.github.io/'>
       <div className="flex-column justify-center align-center min-100-vh">
         <PageHeader />
         <Routes>
           <Route 
-            path="/" 
+            path="/task-tracker" 
             element={<Login />}
           />
           <Route 
-            path="taskDisplay" 
+            path="/task-tracker/taskDisplay" 
             element={<TaskDisplay />}
           />
         </Routes>
