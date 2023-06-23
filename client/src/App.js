@@ -13,11 +13,11 @@ function App() {
         <PageHeader />
         <Routes>
           <Route 
-            path="/task-tracker/" 
+            path="https://oguerra9.github.io/task-tracker/" 
             element={<Login />}
           />
           <Route 
-            path="/task-tracker/taskDisplay/" 
+            path="https://oguerra9.github.io/task-tracker/taskDisplay" 
             element={<TaskDisplay />}
           />
         </Routes>
