@@ -1,5 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { HashRouter } from 'react-router-dom';
+import { BrowserRouter, Router, Routes, Route, HashRouter } from 'react-router-dom';
+// import { HashRouter } from 'react-router-dom';
 // import React, { useState } from 'react';
 import './App.css';
 import Login from './pages/Login';
@@ -9,7 +9,7 @@ import PageHeader from './components/PageHeader';
 function App() {
 
   return (
-    <Router>
+    <BrowserRouter>
       <HashRouter basename='https://oguerra9.github.io/'>
       <div className="flex-column justify-center align-center min-100-vh">
         <PageHeader />
@@ -25,7 +25,7 @@ function App() {
         </Routes>
       </div>
       </HashRouter>
-    </Router>
+    </BrowserRouter>
   );
 }
 
