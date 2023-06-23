@@ -14,7 +14,7 @@ export default function NewTaskForm(props) {
 
     let addMode = false;
 
-    if (props.formMode === 'add') {
+    if (props.formMode === 'Add') {
         addMode = true;
     }
 

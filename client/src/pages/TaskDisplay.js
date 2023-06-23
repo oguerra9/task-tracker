@@ -27,6 +27,7 @@ export default function TaskDisplay(props) {
     const [loading, setLoading] = useState(true);
 
     const [refresh, setRefresh] = useState(true);
+    const [refreshDisplay, setRefreshDisplay] = useState(false);
 
     const [userTasks, setUserTasks] = useState([]);
 
@@ -83,7 +84,12 @@ export default function TaskDisplay(props) {
             setRefresh(false);
         }
 
-    }, [refresh, sortMode]); 
+        if (refreshDisplay === true) {
+            setUserTasks(sortTasks(userTasks));
+            setRefreshDisplay(false);
+        }
+
+    }, [refresh, refreshDisplay]); 
 
 
     const deleteTask = (event) => {
@@ -129,7 +135,7 @@ export default function TaskDisplay(props) {
             task_due_date: task.due_date,
             task_status: task.status,
         });
-        setFormMode('edit');
+        setFormMode('Edit');
         handleShow();
 
     };
@@ -147,8 +153,14 @@ export default function TaskDisplay(props) {
 
     const showAddForm = () => {
         clearForm();
-        setFormMode('add');
+        setFormMode('Add');
         handleShow();
+    };
+
+    const handleSort = (event) => {
+        setSortMode(event.target.value);
+
+        setRefreshDisplay(true);
     };
 
 
@@ -172,7 +184,7 @@ export default function TaskDisplay(props) {
                                         name="sort_mode" 
                                         controlId="sort_mode"
                                         value={sortMode} 
-                                        onChange={(e) => {setSortMode(e.target.value)}}
+                                        onChange={handleSort}
                                     >
                                         <Form.Select>
                                             <option key='default' value='default'>Default</option>
@@ -190,30 +202,12 @@ export default function TaskDisplay(props) {
                         deleteTask={deleteTask}
                         showEditForm={showEditForm}
                     />
-                    {/* <Container className="taskTable">
-                        {userTasks.map(task => (
-                            <Row key={task.id} id={task.id} className="taskLine">
-                                <Col className="taskInfo col-lg-10">
-                                    <Row className="taskTitle">{task.title}</Row>
-                                    <Row className="taskDesc">{task.description}</Row>
-                                    <Row className="taskStatus">{task.status}</Row>
-                                </Col>
-                                <Col className="taskOptions col-lg-2 d-flex align-items-end flex-column">
-                                    <Row className="taskDate d-inline-flex align-self-end m-1 mb-auto">{displayDate(task.due_date)}</Row>
-                                    <Row className="taskOptions d-inline-flex justify-content-end align-self-end">
-                                        <Button className="col-lg-4 m-1 d-flex justify-content-center" name={task.id} onClick={deleteTask}>🗑️</Button>
-                                        <Button className="col-lg-4 m-1 d-flex justify-content-center" name={JSON.stringify(task)} onClick={showEditForm}>✏️</Button>
-                                    </Row>
-                                </Col>
-                            </Row>
-                        ))}
-                    </Container>  */}  
                 </Container>
             )}
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>New Event</Modal.Title>
+                    <Modal.Title>{formMode} Task</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <NewTaskForm 
