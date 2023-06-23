@@ -27,19 +27,6 @@ export default function Login() {
     const handleShowSignUp = () => setShowSignUp(true);
     const handleCloseSignUp = () => setShowSignUp(false);
 
-
-    const [submitted, setSubmitted] = useState(false);
-    const [submittedSU, setSubmittedSU] = useState(false);
-
-    useEffect(() => {
-        if (submitted) {
-            getUserData(username);
-        }
-        if (submittedSU) {
-            signUpUser(username);
-        }
-    }, [submitted, submittedSU]);
-
     const handleChange = (event) => {
         const { name, value } = event.target;
         setUsername(value);
@@ -53,7 +40,8 @@ export default function Login() {
                     window.location.href = 'taskDisplay';
                 } else {
                     handleShowLIAlert();
-                    setSubmitted(false);
+                    //setSubmitted(false);
+                    setUsername('');
                 }
             });
     };
@@ -63,29 +51,30 @@ export default function Login() {
             .then((response) => {
                 if (response === true) {
                     handleShowSUAlert();
-                    setSubmittedSU(false);
+                    setUsername('');
                 } else {
                     addUser(userName);
                     localStorage.setItem('username', userName);
-                    window.location.href = '/taskDisplay';
                 }
             });
     };
 
     const addUser = async (userName) => {
+        console.log(`calling add user`);
         await (DataService.addUser(userName)).then((response) => {
-
+            console.log(`user added`);
+            window.location.href = '/taskDisplay';
         });
     };
 
     const submitForm = (event) => {
         event.preventDefault();
-        setSubmitted(true);
+        getUserData(username);
     };
 
     const submitSignUp = (event) => {
         event.preventDefault();
-        setSubmittedSU(true);
+        signUpUser(username);
     };
 
     return (
