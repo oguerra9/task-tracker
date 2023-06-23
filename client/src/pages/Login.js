@@ -7,6 +7,8 @@ import Col from 'react-bootstrap/Col';
 import DataService from '../services/dataService';
 import Alert from 'react-bootstrap/alert';
 import Modal from 'react-bootstrap/modal';
+import '../style.css';
+import Styler from '../utils/Styler';
 
 export default function Login(props) {
     const [username, setUsername] = useState('');
@@ -35,8 +37,9 @@ export default function Login(props) {
     const getUserData = async (userName) => {
         await (DataService.getUserStatus(userName))
             .then((response) => {
-                if (response === true) {
+                if (response.found === true) {
                     localStorage.setItem("username", userName);
+                    localStorage.setItem('colorScheme', response.colorScheme);
                     props.handlePageChange('taskDisplay');
                 } else {
                     handleShowLIAlert();
@@ -54,12 +57,12 @@ export default function Login(props) {
                 } else {
                     addUser(userName);
                     localStorage.setItem('username', userName);
+                    localStorage.setItem('colorScheme', 'default');
                 }
             });
     };
 
     const addUser = async (userName) => {
-        console.log(`calling add user`);
         await (DataService.addUser(userName)).then((response) => {
             console.log(`user added`);
             props.handlePageChange('taskDisplay');

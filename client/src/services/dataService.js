@@ -1,4 +1,4 @@
-import { collection, getDocs, getDoc, doc, setDoc, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
+import { collection, getDocs, getDoc, doc, setDoc, addDoc, updateDoc, deleteDoc, query } from "firebase/firestore";
 import { db } from '../firebase';
 
 
@@ -28,7 +28,8 @@ class DataService {
         let userRef = doc(db, 'users', userName);
         
         const docRef = await setDoc(userRef, {
-            name: userName
+            name: userName,
+            colorScheme: 'default'
         });
 
         return docRef;
@@ -53,8 +54,6 @@ class DataService {
             status: taskData.task_status,
             title: taskData.task_title,
         });
-
-
     }
 
     async getUserTasks() {
@@ -76,18 +75,31 @@ class DataService {
 
     async getUserStatus(username) {
 
-        let found;
+        let statusResponse = {
+            found: '',
+            colorScheme: ''
+        };
         await getDoc(doc(db, 'users', username))
             .then((querySnapshot) => {
                 if (querySnapshot.exists()) {
                     console.log('user found');
-                    found = true;
+                    statusResponse.found = true;
+                    statusResponse.colorScheme = querySnapshot.data().colorScheme;
                 } else {
                     console.log('user not found');
-                    found = false;
+                    statusResponse.found = false;
                 }
             })
-        return found;
+        return statusResponse;
+    }
+
+    async updateUser(userName, userData) {
+        let userRef = doc(db, 'users', userName);
+
+        await setDoc(userRef, {
+            name: userName,
+            colorScheme: userData,
+        });
     }
 
 }

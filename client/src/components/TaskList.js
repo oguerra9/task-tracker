@@ -4,6 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Xarrow, {useXarrow, Xwrapper} from 'react-xarrows';
+import Styler from '../utils/Styler';
 import '../style.css';
 
 export default function TaskList(props) {
@@ -48,8 +49,8 @@ export default function TaskList(props) {
                     <Col className="taskOptions col-lg-2 d-flex align-items-end flex-column">
                         <Row className="taskDate d-inline-flex align-self-end m-1 mb-auto">{displayDate(task.due_date)}</Row>
                         <Row className="taskOptions d-inline-flex justify-content-end align-self-end">
-                            <Button className="col-lg-4 m-1 d-flex justify-content-center" name={task.id} onClick={props.deleteTask}>🗑️</Button>
-                            <Button className="col-lg-4 m-1 d-flex justify-content-center" name={JSON.stringify(task)} onClick={props.showEditForm}>✏️</Button>
+                            <Button id="myBtn" className="col-lg-4 m-1 d-flex justify-content-center" name={task.id} onClick={props.deleteTask}>🗑️</Button>
+                            <Button id="myBtn" className="col-lg-4 m-1 d-flex justify-content-center" name={JSON.stringify(task)} onClick={props.showEditForm}>✏️</Button>
                         </Row>
                     </Col>
                 </Row>

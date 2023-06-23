@@ -15,11 +15,12 @@ function App() {
     } else {
       setCurrentPage('login');
     }
-  })
+
+  }, []);
+
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    console.log(`location: ${window.location.href}`);
   };
 
   const renderPage = () => {
@@ -30,9 +31,10 @@ function App() {
     }
   };
 
+
   return (
       <div className="flex-column justify-center align-center min-100-vh">
-        <PageHeader handlePageChange={handlePageChange}/>
+        <PageHeader handlePageChange={handlePageChange} />
         {renderPage()}
       </div>
   );

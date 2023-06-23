@@ -8,11 +8,13 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import TaskList from '../components/TaskList';
 import DataService from '../services/dataService';
+import Styler from '../utils/Styler';
 import '../style.css';
 
 
 export default function TaskDisplay(props) {
     let user = localStorage.getItem("username");
+    let colorScheme = localStorage.getItem('colorScheme');
 
     const [formMode, setFormMode] = useState('');
 
@@ -73,6 +75,14 @@ export default function TaskDisplay(props) {
     };
 
     useEffect(() => {
+        if (localStorage.hasOwnProperty('colorScheme')) {
+            let colorScheme = localStorage.getItem('colorScheme');
+            Styler.setColorScheme(colorScheme);
+            let cssSheet = document.styleSheets[1];
+            cssSheet.deleteRule(':root');
+            cssSheet.insertRule(Styler.getSchemeCSSRule());
+        }
+        
         if (refresh === true) {
             
             if (!localStorage.hasOwnProperty('username')) {
@@ -173,7 +183,7 @@ export default function TaskDisplay(props) {
             ) : (
                 <Container>
                     <Container>
-                        <Row className='d-flex mt-2'>
+                        <Row className='d-flex mt-2 mb-2'>
                             <Col className="d-inline-flex">
                                 <h1 className="mb-0">{user}'s Tasks</h1>
                             </Col>

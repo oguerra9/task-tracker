@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
+import '../style.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { collection, getDocs, getDoc, doc } from "firebase/firestore";
@@ -55,7 +56,6 @@ export default function NewTaskForm(props) {
                     >
                         <option value="" disabled>Select</option>
                         {statusOptions.map(status => (
-                            // <option key={status.name} value={status.name}>{status.displayName}</option>
                             <option key={status} value={status}>{status}</option>
                         ))}
                     </Form.Select>
@@ -63,11 +63,11 @@ export default function NewTaskForm(props) {
             </Container>
 
             {addMode ? (
-                <Button variant="primary" type="submit" onClick={props.submitAddForm}>
+                <Button id="myBtn" type="submit" onClick={props.submitAddForm}>
                     Add Task
                 </Button>
             ) : (
-                <Button variant="primary" type="submit" onClick={props.submitEditForm}>
+                <Button id="myBtn" type="submit" onClick={props.submitEditForm}>
                     Update Task
                 </Button>
             )}
