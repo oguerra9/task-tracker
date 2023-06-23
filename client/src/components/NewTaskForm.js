@@ -10,7 +10,7 @@ import DataService from '../services/dataService';
 
 export default function NewTaskForm(props) {
    
-    const statusOptions = ['completed', 'in_progress'];
+    const statusOptions = ['Completed', 'In Progress'];
 
     let addMode = false;
 
@@ -55,6 +55,7 @@ export default function NewTaskForm(props) {
                     >
                         <option value="" disabled>Select</option>
                         {statusOptions.map(status => (
+                            // <option key={status.name} value={status.name}>{status.displayName}</option>
                             <option key={status} value={status}>{status}</option>
                         ))}
                     </Form.Select>

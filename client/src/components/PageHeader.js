@@ -30,7 +30,7 @@ export default function PageHeader(props) {
         <div className="bg-primary min-100-vh">
             <Row> 
                 <Col>
-                    <h1 className="m-2" style={{'color':'white'}}>Task Manager</h1>
+                    <h1 className="m-3" style={{'color':'white'}}>Task Manager</h1>
                 </Col>
                 {loggedIn ? (
                     <Col className="m-2 d-flex justify-content-end">
