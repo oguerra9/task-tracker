@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import './style.css';
 import Login from './pages/Login';
 import TaskDisplay from './pages/TaskDisplay';
 import PageHeader from './components/PageHeader';
