@@ -29,7 +29,7 @@ export default function TaskList(props) {
                     end="addTaskButton" 
                     strokeWidth={2}
                     color={'black'}
-                    curveness={1.3}
+                    curveness={0.5}
                     dashness={true}
                 />
             </Container>
