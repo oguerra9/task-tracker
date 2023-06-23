@@ -78,7 +78,7 @@ export default function TaskDisplay(props) {
         if (localStorage.hasOwnProperty('colorScheme')) {
             let colorScheme = localStorage.getItem('colorScheme');
             Styler.setColorScheme(colorScheme);
-            let cssSheet = document.styleSheets[1];
+            let cssSheet = document.styleSheets[0];
             cssSheet.deleteRule(':root');
             cssSheet.insertRule(Styler.getSchemeCSSRule());
         }

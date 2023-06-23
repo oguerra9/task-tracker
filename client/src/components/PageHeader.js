@@ -24,11 +24,7 @@ export default function PageHeader(props) {
         if (localStorage.hasOwnProperty('colorScheme')) {
             let colorScheme = localStorage.getItem('colorScheme');
             Styler.setColorScheme(colorScheme);
-            console.log(`document style sheets:`);
-            console.log(document.styleSheets);
             let cssSheet = document.styleSheets[0];
-            console.log(`stylesheet [0]:`);
-            console.log(cssSheet);
             cssSheet.deleteRule(':root');
             cssSheet.insertRule(Styler.getSchemeCSSRule());
         }
