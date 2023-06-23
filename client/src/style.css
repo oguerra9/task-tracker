@@ -1,3 +1,11 @@
+:root {
+    --darkest: 'blue';
+    --lightText:'white';
+    --buttonBack: 'blue';
+    --buttonText: 'white';
+    --addButton: 'blue';
+}
+
 .pageHead {
     background-color: var(--darkest);
     color: var(--lightText);
