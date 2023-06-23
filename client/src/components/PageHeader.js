@@ -20,6 +20,8 @@ export default function PageHeader(props) {
     const handleCloseSettings = () => setShowSettings(false);
     const handleShowSettings = () => setShowSettings(true);
 
+    const buttonStyle = {'backgroundColor':(Styler.colors).buttonBack, 'color': (Styler.colors).buttonText};
+
     useEffect(() => {
         if (localStorage.hasOwnProperty('colorScheme')) {
             let colorScheme = localStorage.getItem('colorScheme');
@@ -62,8 +64,8 @@ export default function PageHeader(props) {
                             <h1 className="m-3" style={{'color': (Styler.colors).lightText}}>Task Manager</h1>
                         </Col>
                         <Col className="m-2 d-flex justify-content-end">
-                            <Button id="myBtn" className="align-self-center" onClick={handleShowSettings}>Settings</Button>
-                            <Button id="myBtn" className="align-self-center" onClick={logout}>Logout</Button>
+                            <Button id="myBtn" style={buttonStyle} className="align-self-center" onClick={handleShowSettings}>Settings</Button>
+                            <Button id="myBtn" style={buttonStyle} className="align-self-center" onClick={logout}>Logout</Button>
                         </Col>        
                     </Row>
                 ) : (

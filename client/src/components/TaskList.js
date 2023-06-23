@@ -20,6 +20,8 @@ export default function TaskList(props) {
         return dateString;
     };
 
+    const buttonStyle = {'backgroundColor':(props.Styler.colors).buttonBack, 'color': (props.Styler.colors).buttonText};
+
     if (props.userTasks.length === 0) {
 
         return (
@@ -49,8 +51,8 @@ export default function TaskList(props) {
                     <Col className="taskOptions col-lg-2 d-flex align-items-end flex-column">
                         <Row className="taskDate d-inline-flex align-self-end m-1 mb-auto">{displayDate(task.due_date)}</Row>
                         <Row className="taskOptions d-inline-flex justify-content-end align-self-end">
-                            <Button id="myBtn" className="col-lg-4 m-1 d-flex justify-content-center" name={task.id} onClick={props.deleteTask}>🗑️</Button>
-                            <Button id="myBtn" className="col-lg-4 m-1 d-flex justify-content-center" name={JSON.stringify(task)} onClick={props.showEditForm}>✏️</Button>
+                            <Button id="myBtn" style={buttonStyle} className="col-lg-4 m-1 d-flex justify-content-center" name={task.id} onClick={props.deleteTask}>🗑️</Button>
+                            <Button id="myBtn" style={buttonStyle} className="col-lg-4 m-1 d-flex justify-content-center" name={JSON.stringify(task)} onClick={props.showEditForm}>✏️</Button>
                         </Row>
                     </Col>
                 </Row>

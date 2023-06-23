@@ -101,6 +101,7 @@ export default function TaskDisplay(props) {
 
     }, [refresh, refreshDisplay]); 
 
+    const addButtonStyle = {'backgroundColor':(Styler.colors).addButton, 'color': (Styler.colors).buttonText};
 
     const deleteTask = (event) => {
         let taskId = event.target.name;
@@ -195,6 +196,7 @@ export default function TaskDisplay(props) {
                                         controlId="sort_mode"
                                         value={sortMode} 
                                         onChange={handleSort}
+                                        Styler={Styler}
                                     >
                                         <Form.Select>
                                             <option key='default' value='default'>Default</option>
@@ -211,6 +213,7 @@ export default function TaskDisplay(props) {
                         userTasks={userTasks}
                         deleteTask={deleteTask}
                         showEditForm={showEditForm}
+                        Styler={Styler}
                     />
                 </Container>
             )}
@@ -230,7 +233,7 @@ export default function TaskDisplay(props) {
                     />
                 </Modal.Body>
             </Modal>
-            <Button id="addTaskButton" onClick={showAddForm}><h1 className="m-0 p-0 d-inline">+</h1></Button>
+            <Button id="addTaskButton" style={addButtonStyle} onClick={showAddForm}><h1 className="m-0 p-0 d-inline">+</h1></Button>
         </>
     );
 

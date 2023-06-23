@@ -3,9 +3,11 @@ import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import DataService from '../services/dataService';
+import Styler from '../utils/Styler';
 
 export default function SettingsForm(props) {
     let currUser = localStorage.getItem('username');
+    Styler.setColorScheme(localStorage.getItem('colorScheme'));
     const [userSettings, setUserSettings] = useState('');
 
     let schemeOptions = ['Default', 'Blues', 'Summer', 'Forest', 'Beach', 'Dark Neutral', 'Greens', 'Autumn'];
@@ -33,6 +35,8 @@ export default function SettingsForm(props) {
         props.handleSettingsUpdated();
     }
 
+    const buttonStyle = {'backgroundColor': Styler.colors.buttonBack, 'color':Styler.colors.buttonText};
+
     return (
         <Container>
             
@@ -52,7 +56,7 @@ export default function SettingsForm(props) {
                         ))}
                     </Form.Select>
                 </Form.Group>
-                <Button id="myBtn" type="submit" onClick={submitSaveSettings}>
+                <Button id="myBtn" style={buttonStyle} type="submit" onClick={submitSaveSettings}>
                     Save Settings
                 </Button>
             </Form>

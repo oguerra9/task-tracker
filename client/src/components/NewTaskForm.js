@@ -7,6 +7,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { collection, getDocs, getDoc, doc } from "firebase/firestore";
 import { db } from '../firebase';
+import Styler from '../utils/Styler';
 import DataService from '../services/dataService';
 
 export default function NewTaskForm(props) {
@@ -18,6 +19,10 @@ export default function NewTaskForm(props) {
     if (props.formMode === 'Add') {
         addMode = true;
     }
+
+    Styler.setColorScheme(localStorage.getItem('colorScheme'));
+
+    const buttonStyle = {'backgroundColor':(Styler.colors).buttonBack, 'color': (Styler.colors).buttonText};
 
     return (
         <Form>
@@ -63,11 +68,11 @@ export default function NewTaskForm(props) {
             </Container>
 
             {addMode ? (
-                <Button id="myBtn" type="submit" onClick={props.submitAddForm}>
+                <Button id="myBtn" style={buttonStyle} type="submit" onClick={props.submitAddForm}>
                     Add Task
                 </Button>
             ) : (
-                <Button id="myBtn" type="submit" onClick={props.submitEditForm}>
+                <Button id="myBtn" style={buttonStyle} type="submit" onClick={props.submitEditForm}>
                     Update Task
                 </Button>
             )}
