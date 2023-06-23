@@ -26,8 +26,8 @@ export default function PageHeader(props) {
             Styler.setColorScheme(colorScheme);
             console.log(`document style sheets:`);
             console.log(document.styleSheets);
-            let cssSheet = document.styleSheets[1];
-            console.log(`stylesheet [1]:`);
+            let cssSheet = document.styleSheets[0];
+            console.log(`stylesheet [0]:`);
             console.log(cssSheet);
             cssSheet.deleteRule(':root');
             cssSheet.insertRule(Styler.getSchemeCSSRule());
