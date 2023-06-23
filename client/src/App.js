@@ -17,7 +17,7 @@ function App() {
             element={<Login />}
           />
           <Route 
-            path="/task-tracker/taskDisplay" 
+            path="/task-tracker/taskDisplay/" 
             element={<TaskDisplay />}
           />
         </Routes>

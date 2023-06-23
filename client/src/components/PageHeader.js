@@ -22,7 +22,7 @@ export default function PageHeader() {
 
     const logout = () => {
         localStorage.removeItem('username');
-        window.location.href = '/';
+        window.location.href = '/task-tracker/';
         setLoggedIn(false);
     }
 

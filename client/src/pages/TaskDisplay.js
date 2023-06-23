@@ -75,7 +75,7 @@ export default function TaskDisplay() {
         if (refresh === true) {
             
             if (!localStorage.hasOwnProperty('username')) {
-                window.location.href = '/';
+                window.location.href = '/task-tracker/';
             }
         
             getTasks();
