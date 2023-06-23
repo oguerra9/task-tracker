@@ -8,7 +8,7 @@ import DataService from '../services/dataService';
 import Alert from 'react-bootstrap/alert';
 import Modal from 'react-bootstrap/modal';
 
-export default function Login() {
+export default function Login(props) {
     const [username, setUsername] = useState('');
 
     const [showLIAlert, setShowLIAlert] = useState(false);
@@ -37,10 +37,9 @@ export default function Login() {
             .then((response) => {
                 if (response === true) {
                     localStorage.setItem("username", userName);
-                    window.location.href = '/task-tracker/taskDisplay';
+                    props.handlePageChange('taskDisplay');
                 } else {
                     handleShowLIAlert();
-                    //setSubmitted(false);
                     setUsername('');
                 }
             });
@@ -63,7 +62,7 @@ export default function Login() {
         console.log(`calling add user`);
         await (DataService.addUser(userName)).then((response) => {
             console.log(`user added`);
-            window.location.href = '/task-tacker/taskDisplay';
+            props.handlePageChange('taskDisplay');
         });
     };
 

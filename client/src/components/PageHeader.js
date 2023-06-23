@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-export default function PageHeader() {
+export default function PageHeader(props) {
 
     const [loggedIn, setLoggedIn] = useState(false);
 
@@ -22,7 +22,7 @@ export default function PageHeader() {
 
     const logout = () => {
         localStorage.removeItem('username');
-        window.location.href = '/task-tracker/';
+        props.handlePageChange('login');
         setLoggedIn(false);
     }
 

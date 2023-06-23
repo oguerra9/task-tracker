@@ -11,7 +11,7 @@ import DataService from '../services/dataService';
 import '../style.css';
 
 
-export default function TaskDisplay() {
+export default function TaskDisplay(props) {
     let user = localStorage.getItem("username");
 
     const [formMode, setFormMode] = useState('');
@@ -75,7 +75,7 @@ export default function TaskDisplay() {
         if (refresh === true) {
             
             if (!localStorage.hasOwnProperty('username')) {
-                window.location.href = '/task-tracker/';
+                props.handlePageChange('login');
             }
         
             getTasks();
@@ -133,14 +133,6 @@ export default function TaskDisplay() {
         handleShow();
 
     };
-
-    // const displayDate = (dueDateTS) => {
-    //     let tsDate = new Date(dueDateTS);
-    //     tsDate.setDate(tsDate.getDate() + 1);        
-
-    //     let dateString = `${tsDate.getMonth() + 1}/${tsDate.getDate()}/${tsDate.getFullYear()}`;
-    //     return dateString;
-    // };
 
     const clearForm = () => {
         setTaskFormData(
